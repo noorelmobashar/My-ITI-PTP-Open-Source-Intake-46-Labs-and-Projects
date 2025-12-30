@@ -1,0 +1,30 @@
+<html>
+	<head>
+		<title> Task 2 </title>
+	</head>
+	<body>
+		<h2>A simple C program:</h2>
+		<pre>
+&#35;include&lt;stdio.h&gt;   
+&#35;include&lt;conio.h&gt;   
+int exp&#40;int base, int power&#41;    
+&#123;    
+&nbsp;&nbsp;&nbsp;&nbsp;if(power==0)    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#123;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return 1;    
+&nbsp;&nbsp;&nbsp;&nbsp;else    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#123;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; power--;    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return base&#42;exp&#40;base,power&#41;;    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#125;    
+&#125;    
+main&#40;&#41;    
+&#123;    
+&nbsp;&nbsp;&nbsp;int x=2 , y=3 ;    
+&nbsp;&nbsp;&nbsp;clrscr&#40;&#41;;    
+&nbsp;&nbsp;&nbsp;printf&#40;"\n %d ^ %d = %d",x,y,exp&#40;x,y&#41;&#41;;    
+&nbsp;&nbsp;&nbsp;getch&#40;&#41;;  return 0;    
+&#125;
+		</pre>    
+
+
+	</body>
+</html>

@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1761226029 source:c:\trainings\iti\month 1\day 6\oop 6\task 2\main.cpp
+	<iostream>
+	<string.h>
+	<conio.h>
+

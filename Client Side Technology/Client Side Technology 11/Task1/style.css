@@ -1,0 +1,180 @@
+body
+{
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#container
+{
+    width: 800px;
+    height: 600px;
+    margin-top: 80px;
+    background-color: rgb(233, 233, 233);
+    border-radius: 10px;
+    display: inline-block;
+    text-align: center;
+}
+
+.parentCard
+{
+    width: 300px;
+    height: 400px;
+    margin-top: 100px;
+    background-color: rgb(247, 247, 247);
+    border-radius: 10px;
+    border: 2px solid rgb(191, 219, 228);
+    display: none;
+}
+
+.flag
+{
+    width: 100%;
+    height: 150px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.data
+{
+    text-align: left;
+    margin-left: 40px;
+}
+
+.spanData
+{
+    margin-left: 15px;
+    color: rgb(89, 89, 89);
+    font-size: 14px;
+}
+
+.country
+{
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 0;
+    padding-top: 20px;
+    color: rgb(67, 67, 67);
+}
+
+.continent
+{
+    line-height: 12px;
+    font-weight: bold;
+    font-size: 11px;
+    color: rgb(113, 113, 113);
+}
+
+#question
+{
+    width: 350px;
+    height: 150px;
+    margin-top: 225px;
+    background-color: rgb(247, 247, 247);
+    border-radius: 10px;
+    border: 2px solid rgb(191, 219, 228);
+    display: 'inline-block';
+    text-align: left;
+    margin-left: 225px;
+}
+
+
+.questionText
+{
+    margin-left: 20px;
+    color: rgb(67, 67, 67);
+}
+
+input
+{
+    text-align: left;
+    margin-left: 20px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-radius: 5px;
+    border: 2px solid rgb(45, 170, 212);
+}
+
+input:focus
+{
+    border: 2px solid rgb(7, 158, 208);
+    outline: 0;
+}
+
+.btnDiv
+{
+    text-align: right;
+}
+
+.showBtn
+{
+    margin-right: 30px;
+    margin-top: 20px;
+    background-color: rgb(52, 52, 254);
+    color: white;
+    border: 0;
+    padding: 7px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.showBtn:hover
+{
+    background-color: blue;
+}
+
+#countryWarning
+{
+    font-size: 10px;
+    color: red;
+    position: absolute;
+    margin-left: 20px;
+    line-height: 0px;
+    display: none;
+}
+
+.neighborCard
+{
+    margin-left: 70px;
+    width: 210px;
+    height: 270px;
+    position: relative;
+    display: none;
+}
+
+#neighbor .data
+{
+    font-size: 10px;
+}
+
+#neighbor .country
+{
+    padding-top: 10px;
+    font-size: 15px;
+}
+
+#neighbor .continent
+{
+    font-size: 10px;
+}
+
+#neighbor .spanData
+{
+    font-size: 11px;
+}
+
+#neighbor p {
+    margin-left: 20px;
+}
+
+#neighbor img {
+    height: 120px;
+}
+
+.neighborTitle
+{
+    position: absolute;
+    color: gray;
+    font-size: 12px;
+    font-weight: bold;
+    top: -35px;
+    left: 17px;
+}

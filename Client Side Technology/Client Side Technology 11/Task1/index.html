@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 1</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="classes.js"></script>
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div id="container">
+        <div class="parentCard">
+            <img class="flag">
+
+            <p class="data country">Country</p>
+            <p class="data continent">Continent</p>
+
+            <p class="data">🧑‍🤝‍🧑 <span id="population" class="spanData">Blank</span></p>
+            <p class="data">🗣️ <span id="language" class="spanData">Blank</span></p>
+            <p class="data">💰 <span id="currency" class="spanData">Blank</span></p>
+        </div>
+
+        <div id="neighbor" class="parentCard neighborCard">
+            <img class="flag">
+
+            <p class="data country">Country</p>
+            <p class="data continent">Continent</p>
+
+            <p class="data">🧑‍🤝‍🧑 <span id="population" class="spanData">Blank</span></p>
+            <p class="data">🗣️ <span id="language" class="spanData">Blank</span></p>
+            <p class="data">💰 <span id="currency" class="spanData">Blank</span></p>
+
+            <p class="neighborTitle">NEIGHBOR COUNTRY</p>
+        </div>
+
+        <div id="question">
+            <p class="questionText">Insert the country name.</p>
+            <input type="text" name="countryName" size="40x">
+            <p id="countryWarning">There is no country with this name.</p>
+            <div class="btnDiv">
+                <button class="showBtn">Show</button>
+            </div>
+        </div>
+    </div>
+
+    
+</body>
+</html>

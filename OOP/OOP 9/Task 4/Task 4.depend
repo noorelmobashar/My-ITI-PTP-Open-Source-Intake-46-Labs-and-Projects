@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1761558783 source:c:\trainings\iti\month 1\day 9\oop 9\task 4\main.cpp
+	<iostream>
+	<conio.h>
+	<windows.h>
+
+1761558783 >
+
+1761558783 source:/home/noorelmobashar/Trainings/ITI/Month 1/Day 9/OOP 9/Task 4/main.cpp
+	<iostream>
+	<conio.h>
+	<windows.h>
+

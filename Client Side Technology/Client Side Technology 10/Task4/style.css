@@ -1,0 +1,15 @@
+body
+{
+    margin: 0;
+}
+*
+{
+    cursor: url("images/shooting_point.png") 32 32, auto;
+}
+
+.bird
+{
+    position: absolute;
+    width: 10%;
+    height: 10%;
+}

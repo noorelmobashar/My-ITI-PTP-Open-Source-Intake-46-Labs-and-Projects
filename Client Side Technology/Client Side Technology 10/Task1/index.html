@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 1</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="classes.js"></script>
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div id="form">
+        <form id="studentsForm">
+            <p>
+                Department
+                <input type="radio" name="department" value="SD" checked>SD
+                <input type="radio" name="department" value="OS">OS
+                <input type="radio" name="department" value="EL">EL
+            </p>
+            <p>
+                StudentName <input type="text" name="studentName">
+            </p>
+            <p class="warning studentName">The name should not be empty.</p>
+            <p>
+                StudentGrade <input type="number" name="studentGrade">
+            </p>
+            <p class="warning studentGrade">The Grade should be a number between 0 and 100.</p>
+            
+        </form>
+        <button disabled>Add</button>
+        <p class="warning repeat">Name Already Exists.</p>
+
+        <p>
+            Sort
+            <select name="sortSelection">
+                <option name="sort" value="name" selected>Name</option>
+                <option name="sort" value="grade">Grade</option>
+            </select>
+        </p>
+        <p>
+            Filter
+            <select name="filterSelection">
+                <option name="filter" value="all" selected>All</option>
+                <option name="filter" value="success">Success</option>
+                <option name="filter" value="fail">Fail</option>
+            </select>
+        </p>
+        <table class="studentsTable">
+
+        </table>
+    </div>
+</body>
+</html>

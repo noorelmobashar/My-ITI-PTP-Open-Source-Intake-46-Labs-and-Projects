@@ -1,0 +1,25 @@
+body
+{
+    text-align: center;
+}
+#form 
+{
+    background-color: rgb(184, 184, 184);
+    border: 3px solid black;
+    font-size: 18px;
+    text-align: left;
+    display: inline-block;
+    padding: 30px;
+}
+.warning
+{
+    color: red;
+    font-size: 12px;
+    line-height: 0px;
+    display: none;
+}
+
+.studentsTable
+{
+    width: 300px;
+}

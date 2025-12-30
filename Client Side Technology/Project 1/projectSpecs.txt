@@ -1,0 +1,54 @@
+student registration =>
+(
+username, password, grade (from 1 to 3), Mobile number, profile pic
+)
+student/teacher login
+redirect student to profile page
+redirect teacher to dashboard to add new quizzes
+otherwise, error message display
+
+profile page => (
+profile pic, username, list of completed exams => (
+	exam_name, score, Date_Taken 
+), list all required (next) exams.
+)
+
+teacher dashboard => (
+	create_new_exams => (
+		exam_name,
+		exam_duration,
+		number_of_questions >= 15,
+		each_quesiton => (
+			text,
+			image,
+			choices,
+			correct_answer,
+			diffculty_level (easy, middle, hard),
+			score
+		) -- validate sum of scores = 100,
+		timer
+	)
+)
+
+Teacher can update, delete any question in any exam (students who took it?)
+
+Teacher add all students who should take this exam
+Display all students exam results with dates
+teacher review student exam questions answers
+randomized quiz generation (random order in quesitons and answers)
+
+each question has a time related to total exam time
+(consider the weight of the quesiton)
+
+when student finish exam the result will appear.
+
+After submitting the quiz:
+student see final score
+student can not take exam twice.
+score is saved to student profile
+
+
+
+
+
+
