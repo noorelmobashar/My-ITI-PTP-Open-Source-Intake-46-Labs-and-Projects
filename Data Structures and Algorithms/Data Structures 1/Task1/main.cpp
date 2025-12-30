@@ -168,6 +168,7 @@ class LinkedList
             }
             head = NULL;
             tail = NULL;
+            numNodes = 0
         }
 };
 int main()
