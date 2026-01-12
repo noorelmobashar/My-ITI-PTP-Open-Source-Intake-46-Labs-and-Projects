@@ -226,7 +226,7 @@ function createExamUI() {
         }
 
         // check if there are enough questions
-        if (newQuestions.length < 15) {
+        if (newQuestions.length < 5) {
             alert(`You must have at least 15 questions. Currently you have ${newQuestions.length}.`);
             return;
         }

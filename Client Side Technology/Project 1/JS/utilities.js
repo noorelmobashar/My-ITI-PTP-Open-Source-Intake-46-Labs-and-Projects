@@ -37,7 +37,7 @@ function checkLoggedInUser() {
 async function uploadStudentImage(imageFile) {
     let formData = new FormData();
     formData.append("image", imageFile);
-    let response = await fetch("https://api.imgbb.com/1/upload?key=<YOUR_KEY>", {
+    let response = await fetch("https://api.imgbb.com/1/upload?key=<API_KEY>", {
         method: "POST",
         body: formData
     });

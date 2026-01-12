@@ -25,16 +25,7 @@ for (let teacher of teachers) {
     }
 }
 
-if (!exam) {
-    alert("Exam not found!");
-    window.location.href = "studentDashboard.html";
-}
 
-// check if student already took the exam
-if (currentUser.completedExams.find(e => e.id === examId)) {
-    alert("You have already taken this exam.");
-    window.location.href = "studentDashboard.html";
-}
 
 let currentQuestionIndex = 0;
 let userAnswers = {}; 
@@ -45,6 +36,71 @@ let globalTimeRemaining = 0;
 let questionTimeRemaining = 0; 
 let session = null;
 
+// Function to register/update active exam session
+function registerActiveExamSession(studentId, examId) {
+    let activeSessions = getFromLocalStorage("activeExamSessions") || [];
+    // Check if session already exists
+    let existingSession = activeSessions.find(s => s.student_id === studentId && s.exam_id === examId);
+    if (!existingSession) {
+        activeSessions.push({
+            student_id: studentId,
+            exam_id: examId,
+            modified: false
+        });
+        saveToLocalStorage("activeExamSessions", activeSessions);
+    }
+}
+
+// Function to remove active exam session
+function removeActiveExamSession(studentId, examId) {
+    let activeSessions = getFromLocalStorage("activeExamSessions") || [];
+    activeSessions = activeSessions.filter(s => !(s.student_id === studentId && s.exam_id === examId));
+    saveToLocalStorage("activeExamSessions", activeSessions);
+}
+
+// Function to check if exam was modified during session
+function checkIfExamModified(studentId, examId) {
+    let activeSessions = getFromLocalStorage("activeExamSessions") || [];
+    let session = activeSessions.find(s => s.student_id === studentId && s.exam_id === examId);
+    return session ? session.modified : false;
+}
+
+// Function to show exam modified modal
+function showExamModifiedModal() {
+    clearInterval(globalTimerInterval);
+    clearInterval(questionTimerInterval);
+    
+    // Save current answers to teacher's data before clearing session
+    // This ensures answered questions are preserved for the retake
+    let teacherUpdated = false;
+    teachers = teachers.map(t => {
+        let eIndex = t.createdExams.findIndex(e => e.id === exam.id);
+        if (eIndex !== -1) {
+            let enrolledIndex = t.createdExams[eIndex].enrolledStudents.findIndex(s => s.id === currentUser.id);
+            if (enrolledIndex !== -1) {
+                // Merge current answers with any existing answers
+                let existingAnswers = t.createdExams[eIndex].enrolledStudents[enrolledIndex].answers || {};
+                t.createdExams[eIndex].enrolledStudents[enrolledIndex].answers = {...existingAnswers, ...userAnswers};
+            }
+            teacherUpdated = true;
+        }
+        return t;
+    });
+    
+    if (teacherUpdated) {
+        saveToLocalStorage("teachers", teachers);
+    }
+    
+    removeActiveExamSession(currentUser.id, exam.id);
+    localStorage.removeItem("activeExamSession");
+    
+    let examModifiedModal = new bootstrap.Modal(document.getElementById('examModifiedModal'));
+    examModifiedModal.show();
+    
+    document.getElementById('examModifiedBtn').addEventListener('click', () => {
+        window.location.href = 'studentDashboard.html';
+    });
+}
 
 // shuffle questions here
 function shuffleArray(array) {
@@ -80,6 +136,9 @@ function calculateQuestionTimes(questions, totalDurationMinutes) {
 function initExam() {
     document.getElementById("examTitle").innerText = exam.examName;
     
+    // Register this student as actively taking the exam
+    registerActiveExamSession(currentUser.id, exam.id);
+    
     //  check if there is an active session
     let storedSession = getFromLocalStorage("activeExamSession");
     
@@ -101,12 +160,6 @@ function initExam() {
         userAnswers = {...existingAnswers}; 
 
         let allQuestions = JSON.parse(JSON.stringify(exam.questions));
-
-        if (allQuestions.some(q => q.id === undefined || q.id === null)) {
-            alert("Error: This exam data is corrupted (missing question IDs). Please contact your teacher to edit and save the exam again.");
-            window.location.href = "studentDashboard.html";
-            return;
-        }
 
         // calculate time limits for all questions
         let allQuestionsWithTime = calculateQuestionTimes(allQuestions, exam.examDuration);
@@ -420,6 +473,12 @@ function handleQuestionTimeout() {
 
 // handle next button click
 document.getElementById("nextBtn").addEventListener("click", () => {
+    // Check if exam was modified by teacher
+    if (checkIfExamModified(currentUser.id, exam.id)) {
+        showExamModifiedModal();
+        return;
+    }
+    
     if (currentQuestionIndex < shuffledQuestions.length - 1) {
         currentQuestionIndex++;
         session.currentIndex = currentQuestionIndex;
@@ -431,6 +490,12 @@ document.getElementById("nextBtn").addEventListener("click", () => {
 
 // handle submit button click
 document.getElementById("submitBtn").addEventListener("click", () => {
+    // Check if exam was modified by teacher
+    if (checkIfExamModified(currentUser.id, exam.id)) {
+        showExamModifiedModal();
+        return;
+    }
+    
     if (confirm("Are you sure you want to submit the exam?")) {
         submitExam();
     }
@@ -495,6 +560,9 @@ function submitExam() {
     
     // clear session here
     localStorage.removeItem("activeExamSession");
+    
+    // Remove from active exam sessions
+    removeActiveExamSession(currentUser.id, exam.id);
 
     // show result here
     document.getElementById("resultScore").innerText = `Your Score: ${score} / ${totalScore}`;
@@ -512,4 +580,19 @@ function submitExam() {
     resultModal.show();
 }
 
-initExam();
+if (!exam) {
+    alert("Exam not found!");
+    window.location.href = "studentDashboard.html";
+}
+else if (currentUser.completedExams.find(e => e.id === examId)) {
+    alert("You have already taken this exam.");
+    window.location.href = "studentDashboard.html";
+}
+else if(exam.enrolledStudents && !exam.enrolledStudents.find(s => s.id === currentUser.id)) {
+    alert("You are not enrolled in this exam.");
+    window.location.href = "studentDashboard.html";
+}
+else
+{
+    initExam();
+}

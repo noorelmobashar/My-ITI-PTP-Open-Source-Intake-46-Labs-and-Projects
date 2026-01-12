@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="color" id="colorPicker" value="#ff0000">
+    <button id="changeColorBtn">Change color</button> <br><br>
+    <canvas id="myCanvas" width="1000" height="600">
+    </canvas>
+
+    <script>
+        let canvas = document.getElementById("myCanvas");
+        let ctx = canvas.getContext("2d");
+        let colorPicker = document.getElementById("colorPicker");
+        let changeColorBtn = document.getElementById("changeColorBtn");
+
+        function drawCircle(color) {
+            let randomX = Math.random() * canvas.width;
+            let randomY = Math.random() * canvas.height;
+            let radius = 30 + Math.random() * 70;
+            ctx.beginPath(); 
+            ctx.arc(randomX, randomY, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 4;
+            ctx.stroke();
+        }
+        changeColorBtn.addEventListener("click", function() {
+            let selectedColor = colorPicker.value;
+            let numberOfCircles = 90;
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas before drawing new circles
+            for (let i = 0; i < numberOfCircles; i++) {
+                drawCircle(selectedColor);
+            }
+        });
+    </script>
+</body>
+</html>

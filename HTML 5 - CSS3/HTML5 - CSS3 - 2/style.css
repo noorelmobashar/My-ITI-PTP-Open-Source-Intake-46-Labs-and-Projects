@@ -1,0 +1,124 @@
+body{
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    background-color: rgb(232, 232, 232);
+}
+
+nav div {
+    display: flex;
+    background-color: white;
+    margin: 10px 0px;
+    flex-grow: 1;
+    justify-content: center;
+    padding: 20px 0px;
+    font-size: 19px;
+    color:gray;
+    border-bottom: 2px solid rgba(222, 83, 54);
+    cursor: pointer;
+}
+
+nav div:hover {
+    background-color: rgb(226, 226, 226);
+}
+
+.header-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin: 60px 0px;
+}
+.header-card {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid rgba(222, 83, 54);
+    border-radius: 10px;
+    width: 350px;
+    height: 250px;
+    align-items: center;
+    justify-content: space-around;    
+}
+
+.header-card-item{
+    display: flex;
+    flex-direction: column;
+    margin: 0px 30px;
+}
+.header-card-item p {
+    height: 20px;
+    text-align: center;
+}
+.header-card-item button{
+    padding: 10px 130px;
+    background-color: rgba(45, 62, 80);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.header-card-item button:hover{
+    background-color: rgb(40, 54, 70);
+}
+.section-container{
+    background-color: rgba(45, 62, 80);
+    padding-top: 60px;
+    padding-bottom: 30px;
+}
+
+.section-container-header{
+    font-size: 35px;
+    color: rgba(222, 83, 54);
+    text-align: center;
+    font-weight: 600;
+}
+
+.section-container-description{
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    margin: 0px 30px;
+}
+
+.section-container-cards
+{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.section-container-card
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width: 300px;
+    height: 300px;
+    border-radius: 15px;
+}
+.circle
+{
+    width: 100px;
+    height: 100px;
+    background-color: rgba(222, 83, 54);
+    border-radius: 50%;
+}
+
+.card-feature
+{
+    font-weight: 600;
+}
+
+.card-feature-description
+{
+    font-size: 12px;
+    color: gray;
+}

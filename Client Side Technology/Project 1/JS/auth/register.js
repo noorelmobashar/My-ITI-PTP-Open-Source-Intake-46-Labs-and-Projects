@@ -26,12 +26,15 @@ document.querySelector("#username").addEventListener("input", function() {
     let username = this.value;
     let usernameExists = students.find(student => student.username === username) || teachers.find(teacher => teacher.username === username);
 
-    if (usernameExists || username.length < 3) {
+    if (usernameExists || username.length < 3 || username.includes(" ")) {
         validUsername = false;
         if(username.length < 3){
             document.querySelector("#invalidUsernameFeedback p").innerText = "Username must be at least 3 characters long.";
-        } else {
+        } else if(usernameExists){
             document.querySelector("#invalidUsernameFeedback p").innerText = "Username already exists.";
+        }
+        else {
+            document.querySelector("#invalidUsernameFeedback p").innerText = "Username cannot contain spaces.";
         }
         this.classList.add("is-invalid");
         this.classList.remove("is-valid");

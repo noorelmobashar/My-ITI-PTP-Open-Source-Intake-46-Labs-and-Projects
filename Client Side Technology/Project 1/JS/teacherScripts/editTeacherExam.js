@@ -358,6 +358,16 @@ function editExam(examId) {
         currentUser.createdExams = currentUser.createdExams.map(e => e.id === exam.id ? exam : e);
 
         if (questionsChanged) {
+            // Mark active exam sessions as modified for students taking this exam
+            let activeSessions = getFromLocalStorage("activeExamSessions") || [];
+            activeSessions = activeSessions.map(session => {
+                if (session.exam_id === exam.id) {
+                    session.modified = true;
+                }
+                return session;
+            });
+            saveToLocalStorage("activeExamSessions", activeSessions);
+            
             // reset progress for modified questions
             exam.enrolledStudents.forEach(enrollment => {
                 let student = students.find(s => s.id === enrollment.id);
