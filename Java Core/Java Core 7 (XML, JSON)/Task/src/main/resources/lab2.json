@@ -1,0 +1,184 @@
+{
+  "library": {
+    "id": "lib",
+    "location": {
+      "id": "loc",
+      "value": "Mansoura, Egypt"
+    },
+    "description": {
+      "id": "desc",
+      "value": "Mansoura Technology & Programming Library"
+    },
+    "established": {},
+    "librarian": {
+      "id": "librarian",
+      "name": { "id": "lib_name", "value": "Noor Elmobashar" },
+      "email": { "id": "lib_email", "value": "noorelmobashar@gmail.com" },
+      "phone_number": { "id": "lib_phone", "value": "+201551825532" }
+    },
+    "books": [
+      {
+        "id": "b1",
+        "title": "Mastering Modern C++",
+        "isbn": "978-0131103627",
+        "author": "Bjarne Stroustrup",
+        "preface": "Focuses on RAII and Move Semantics.",
+        "parts": [
+          {
+            "id": "b1_p1",
+            "title": "Memory Management",
+            "chapters": [
+              {
+                "id": "b1_p1_c1",
+                "title": "Smart Pointers",
+                "summary": "Unique and Shared pointers.",
+                "sections": [
+                  {
+                    "id": "b1_p1_c1_s1",
+                    "paragraph": "Use unique_ptr for exclusive ownership: std::unique_ptr<int> p = std::make_unique<int>(10);"
+                  },
+                  {
+                    "id": "b1_p1_c1_s2",
+                    "paragraph": "Use shared_ptr for multiple owners: std::shared_ptr<int> s = std::make_shared<int>(20);"
+                  }
+                ]
+              },
+              {
+                "id": "b1_p1_c2",
+                "title": "RAII Pattern",
+                "summary": "Resource Acquisition Is Initialization.",
+                "sections": [
+                  {
+                    "id": "b1_p1_c2_s1",
+                    "paragraph": "Example of a lock guard: std::lock_guard<std::mutex> lock(m);"
+                  },
+                  {
+                    "id": "b1_p1_c2_s2",
+                    "paragraph": "File handling via RAII: std::ofstream file(\"data.txt\");"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "b1_p2",
+            "title": "Generic Programming",
+            "chapters": [
+              {
+                "id": "b1_p2_c1",
+                "title": "Templates",
+                "summary": "Function and Class templates.",
+                "sections": [
+                  {
+                    "id": "b1_p2_c1_s1",
+                    "paragraph": "Basic function template: template<typename T> T add(T a, T b);"
+                  },
+                  {
+                    "id": "b1_p2_c1_s2",
+                    "paragraph": "Class template: template<class T> class Box {};"
+                  }
+                ]
+              },
+              {
+                "id": "b1_p2_c2",
+                "title": "Concepts (C++20)",
+                "summary": "Constraining template arguments.",
+                "sections": [
+                  {
+                    "id": "b1_p2_c2_s1",
+                    "paragraph": "Requiring integral types: template<std::integral T> void func(T v);"
+                  },
+                  {
+                    "id": "b1_p2_c2_s2",
+                    "paragraph": "Using requires clauses: requires (T a) { a + a; }"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "b2",
+        "title": "Competitive Programming in C++",
+        "isbn": "978-3319725468",
+        "author": "Antti Laaksonen",
+        "preface": "Optimizing speed for contests.",
+        "parts": [
+          {
+            "id": "b2_p1",
+            "title": "Data Structures",
+            "chapters": [
+              {
+                "id": "b2_p1_c1",
+                "title": "Segment Trees",
+                "summary": "Range queries in O(log n).",
+                "sections": [
+                  {
+                    "id": "b2_p1_c1_s1",
+                    "paragraph": "Update function: tree[v] = val;"
+                  },
+                  {
+                    "id": "b2_p1_c1_s2",
+                    "paragraph": "Sum query: return query(l, r);"
+                  }
+                ]
+              },
+              {
+                "id": "b2_p1_c2",
+                "title": "Fenwick Trees",
+                "summary": "Binary Indexed Trees.",
+                "sections": [
+                  {
+                    "id": "b2_p1_c2_s1",
+                    "paragraph": "Adding values: for (; i <= n; i += i & -i) bit[i] += v;"
+                  },
+                  {
+                    "id": "b2_p1_c2_s2",
+                    "paragraph": "Prefix sum: for (; i > 0; i -= i & -i) sum += bit[i];"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "b2_p2",
+            "title": "Graph Algorithms",
+            "chapters": [
+              {
+                "id": "b2_p2_c1",
+                "title": "Shortest Paths",
+                "summary": "Dijkstra and Bellman-Ford.",
+                "sections": [
+                  {
+                    "id": "b2_p2_c1_s1",
+                    "paragraph": "Priority Queue setup: std::priority_queue<std::pair<int, int>> pq;"
+                  },
+                  {
+                    "id": "b2_p2_c1_s2",
+                    "paragraph": "Bellman-Ford relaxation: dist[v] = std::min(dist[v], dist[u] + w);"
+                  }
+                ]
+              },
+              {
+                "id": "b2_p2_c2",
+                "title": "Trees",
+                "summary": "LCA and Tree DP.",
+                "sections": [
+                  {
+                    "id": "b2_p2_c1_s1",
+                    "paragraph": "Binary lifting table: up[v][i] = up[up[v][i-1]][i-1];"
+                  },
+                  {
+                    "id": "b2_p2_c1_s2",
+                    "paragraph": "LCA query logic: if (up[u][i] != up[v][i]) { ... }"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

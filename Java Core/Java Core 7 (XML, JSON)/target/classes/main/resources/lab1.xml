@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library id="lib">
+
+    <location id="loc">Mansoura, Egypt</location>
+    <description id="desc">Mansoura Technology &amp; Programming Library</description>
+
+    <established />
+
+    <librarian id="librarian">
+        <name id="lib_name">Noor Elmobashar</name>
+        <email id="lib_email">noorelmobashar@gmail.com</email>
+        <phone_number id="lib_phone">+201551825532</phone_number>
+    </librarian>
+
+    <books id="books">
+
+        <book id="b1">
+            <title id="b1_title">Mastering Modern C++</title>
+            <isbn id="b1_isbn">978-0131103627</isbn>
+            <author id="b1_author">Bjarne Stroustrup</author>
+            <preface id="b1_preface">Focuses on RAII and Move Semantics.</preface>
+
+
+            <parts id="b1_parts">
+                <part id="b1_p1">
+                    <title id="b1_p1_title">Memory Management</title>
+                    <chapters id="b1_p1_chaps">
+                        <chapter id="b1_p1_c1">
+                            <title id="b1_p1_c1_title">Smart Pointers</title>
+                            <summary id="b1_p1_c1_sum">Unique and Shared pointers.</summary>
+                            <sections id="b1_p1_c1_secs">
+                                <section id="b1_p1_c1_s1">
+                                    <paragraph id="b1_p1_c1_s1_p">
+                                        Use unique_ptr for exclusive ownership: <![CDATA[std::unique_ptr<int> p = std::make_unique<int>(10);]]>
+                                    </paragraph>
+                                </section>
+                                <section id="b1_p1_c1_s2">
+                                    <paragraph id="b1_p1_c1_s2_p">
+                                        Use shared_ptr for multiple owners: <![CDATA[std::shared_ptr<int> s = std::make_shared<int>(20);]]>
+                                    </paragraph>
+                                </section>
+                            </sections>
+                        </chapter>
+                        <chapter id="b1_p1_c2">
+                            <title id="b1_p1_c2_title">RAII Pattern</title>
+                            <summary id="b1_p1_c2_sum">Resource Acquisition Is Initialization.</summary>
+                            <sections id="b1_p1_c2_secs">
+                                <section id="b1_p1_c2_s1">
+                                    <paragraph id="b1_p1_c2_s1_p">Example of a lock guard: <![CDATA[std::lock_guard<std::mutex> lock(m);]]></paragraph>
+                                </section>
+                                <section id="b1_p1_c2_s2">
+                                    <paragraph id="b1_p1_c2_s2_p">File handling via RAII: <![CDATA[std::ofstream file("data.txt");]]></paragraph>
+                                </section>
+                            </sections>
+                        </chapter>
+                    </chapters>
+                </part>
+                <part id="b1_p2">
+                    <title id="b1_p2_title">Generic Programming</title>
+                    <chapters id="b1_p2_chaps">
+                        <chapter id="b1_p2_c1">
+                            <title id="b1_p2_c1_title">Templates</title>
+                            <summary id="b1_p2_c1_sum">Function and Class templates.</summary>
+                            <sections id="b1_p2_c1_secs">
+                                <section id="b1_p2_c1_s1">
+                                    <paragraph id="b1_p2_c1_s1_p">Basic function template: <![CDATA[template<typename T> T add(T a, T b);]]></paragraph>
+                                </section>
+                                <section id="b1_p2_c1_s2">
+                                    <paragraph id="b1_p2_c1_s2_p">Class template: <![CDATA[template<class T> class Box {};]]></paragraph>
+                                </section>
+                            </sections>
+                        </chapter>
+                        <chapter id="b1_p2_c2">
+                            <title id="b1_p2_c2_title">Concepts (C++20)</title>
+                            <summary id="b1_p2_c2_sum">Constraining template arguments.</summary>
+                            <sections id="b1_p2_c2_secs">
+                                <section id="b1_p2_c2_s1">
+                                    <paragraph id="b1_p2_c2_s1_p">Requiring integral types: <![CDATA[template<std::integral T> void func(T v);]]></paragraph>
+                                </section>
+                                <section id="b1_p2_c2_s2">
+                                    <paragraph id="b1_p2_c2_s2_p">Using requires clauses: <![CDATA[requires (T a) { a + a; }]]></paragraph>
+                                </section>
+                            </sections>
+                        </chapter>
+                    </chapters>
+                </part>
+            </parts>
+        </book>
+
+        <book id="b2">
+            <title id="b2_title">Competitive Programming in C++</title>
+            <isbn id="b2_isbn">978-3319725468</isbn>
+            <author id="b2_author">Antti Laaksonen</author>
+            <preface id="b2_preface">Optimizing speed for contests.</preface>
+
+
+            <parts id="b2_parts">
+                <part id="b2_p1">
+                    <title id="b2_p1_title">Data Structures</title>
+                    <chapters id="b2_p1_chaps">
+                        <chapter id="b2_p1_c1">
+                            <title id="b2_p1_c1_title">Segment Trees</title>
+                            <summary id="b2_p1_c1_sum">Range queries in O(log n).</summary>
+                            <sections id="b2_p1_c1_secs">
+                                <section id="b2_p1_c1_s1">
+                                    <paragraph id="b2_p1_c1_s1_p">Update function: <![CDATA[tree[v] = val;]]></paragraph>
+                                </section>
+                                <section id="b2_p1_c1_s2">
+                                    <paragraph id="b2_p1_c1_s2_p">Sum query: <![CDATA[return query(l, r);]]></paragraph>
+                                </section>
+                            </sections>
+                        </chapter>
+                        <chapter id="b2_p1_c2">
+                            <title id="b2_p1_c2_title">Fenwick Trees</title>
+                            <summary id="b2_p1_c2_sum">Binary Indexed Trees.</summary>
+                            <sections id="b2_p1_c2_secs">
+                                <section id="b2_p1_c2_s1">
+                                    <paragraph id="b2_p1_c2_s1_p">Adding values: <![CDATA[for (; i <= n; i += i & -i) bit[i] += v;]]></paragraph>
+                                </section>
+                                <section id="b2_p1_c2_s2">
+                                    <paragraph id="b2_p1_c2_s2_p">Prefix sum: <![CDATA[for (; i > 0; i -= i & -i) sum += bit[i];]]></paragraph>
+                                </section>
+                            </sections>
+                        </chapter>
+                    </chapters>
+                </part>
+                <part id="b2_p2">
+                    <title id="b2_p2_title">Graph Algorithms</title>
+                    <chapters id="b2_p2_chaps">
+                        <chapter id="b2_p2_c1">
+                            <title id="b2_p2_c1_title">Shortest Paths</title>
+                            <summary id="b2_p2_c1_sum">Dijkstra and Bellman-Ford.</summary>
+                            <sections id="b2_p2_c1_secs">
+                                <section id="b2_p2_c1_s1">
+                                    <paragraph id="b2_p2_c1_s1_p">Priority Queue setup: <![CDATA[std::priority_queue<std::pair<int, int>> pq;]]></paragraph>
+                                </section>
+                                <section id="b2_p2_c1_s2">
+                                    <paragraph id="b2_p2_c1_s2_p">Bellman-Ford relaxation: <![CDATA[dist[v] = std::min(dist[v], dist[u] + w);]]></paragraph>
+                                </section>
+                            </sections>
+                        </chapter>
+                        <chapter id="b2_p2_c2">
+                            <title id="b2_p2_c2_title">Trees</title>
+                            <summary id="b2_p2_c2_sum">LCA and Tree DP.</summary>
+                            <sections id="b2_p2_c2_secs">
+                                <section id="b2_p2_c2_s1">
+                                    <paragraph id="b2_p2_c2_s1_p">Binary lifting table: <![CDATA[up[v][i] = up[up[v][i-1]][i-1];]]></paragraph>
+                                </section>
+                                <section id="b2_p2_c2_s2">
+                                    <paragraph id="b2_p2_c2_s2_p">LCA query logic: <![CDATA[if (up[u][i] != up[v][i]) { ... }]]></paragraph>
+                                </section>
+                            </sections>
+                        </chapter>
+                    </chapters>
+                </part>
+            </parts>
+        </book>
+    </books>
+
+</library>
