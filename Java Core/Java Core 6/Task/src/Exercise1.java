@@ -76,8 +76,8 @@ class City {
 }
 public class Exercise1 {
     public static void main(String[] args) throws IOException {
-        String fileName1 = "src/Countries.csv";
-        String fileName2 = "src/Cities.csv";
+        String fileName1 = "/home/noorelmobashar/Trainings/ITI/Java Core/Java Core 6/Task/src/Countries.csv";
+        String fileName2 = "/home/noorelmobashar/Trainings/ITI/Java Core/Java Core 6/Task/src/Cities.csv";
 
         List<Country> countries = Files.lines(Paths.get(fileName1))
                 .skip(1) // Skip the CSV header row

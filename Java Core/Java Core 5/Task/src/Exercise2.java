@@ -38,7 +38,7 @@ public class Exercise2 {
                         xCoordinate = this.getWidth();
                     }
 
-                    this.repaint();
+                    //this.repaint();
                     Thread.sleep(20);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
