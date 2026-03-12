@@ -30,17 +30,17 @@
 				<div class="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
 					<div class="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
 						<p class="text-sm text-slate-400">Total Posts</p>
-						<p class="mt-3 text-3xl font-semibold text-white">{{ count($posts) }}</p>
+						<p class="mt-3 text-3xl font-semibold text-white">{{ $posts->total() }}</p>
 					</div>
 
 					<div class="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
-						<p class="text-sm text-slate-400">Status</p>
-						<p class="mt-3 text-lg font-semibold text-emerald-300">Pagination Ready</p>
+						<p class="text-sm text-slate-400">Current Page</p>
+						<p class="mt-3 text-lg font-semibold text-emerald-300">{{ $posts->currentPage() }} / {{ $posts->lastPage() }}</p>
 					</div>
 
 					<div class="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
-						<p class="text-sm text-slate-400">Design</p>
-						<p class="mt-3 text-lg font-semibold text-fuchsia-300">Responsive + Modern</p>
+						<p class="text-sm text-slate-400">Showing</p>
+						<p class="mt-3 text-lg font-semibold text-fuchsia-300">{{ $posts->firstItem() ?? 0 }} - {{ $posts->lastItem() ?? 0 }}</p>
 					</div>
 				</div>
 			</section>
@@ -69,21 +69,21 @@
                             @foreach ($posts as $post)
                                 
                                 <tr class="transition hover:bg-white/[0.03]">
-                                    <td class="px-8 py-5 font-semibold text-white">{{ $post['id'] }}</td>
+                                    <td class="px-8 py-5 font-semibold text-white">{{ $post->id }}</td>
                                     <td class="px-8 py-5">
-                                        <div class="font-medium text-white">{{ $post['title'] }}</div>
+                                        <div class="font-medium text-white">{{ $post->title }}</div>
                                     </td>
-                                    <td class="px-8 py-5 text-slate-300">{{ $post['creator']['name'] }}</td>
-                                    <td class="px-8 py-5 text-slate-300">{{ $post['created_at'] }}</td>
+                                    <td class="px-8 py-5 text-slate-300">{{ $post->user->name }}</td>
+                                    <td class="px-8 py-5 text-slate-300">{{ $post->created_at->format('Y-m-d') }}</td>
                                     <td class="px-8 py-5">
                                         <div class="flex justify-end gap-2">
-											<x-button href="{{ route('posts.show', ['id' => $post['id']]) }}" variant="view" class="rounded-xl px-4 py-2">
+											<x-button href="{{ route('posts.show', ['id' => $post->id]) }}" variant="view" class="rounded-xl px-4 py-2">
 												View
 											</x-button>
-											<x-button href="{{ route('posts.edit', ['id' => $post['id']]) }}" variant="edit" class="rounded-xl px-4 py-2">
+											<x-button href="{{ route('posts.edit', ['id' => $post->id]) }}" variant="edit" class="rounded-xl px-4 py-2">
 												Edit
 											</x-button>
-                                            <form method="POST" action="{{ route('posts.destroy', ['id' => $post['id']]) }}" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                            <form method="POST" action="{{ route('posts.destroy', ['id' => $post->id]) }}" onsubmit="return confirm('Are you sure you want to delete this post?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <x-button type="submit" variant="delete" class="rounded-xl px-4 py-2">
@@ -100,12 +100,10 @@
 				</div>
 
 				<div class="border-t border-white/10 px-6 py-5 lg:px-8">
-					<div class="flex flex-wrap items-center justify-center gap-2 text-sm">
-						<span class="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-slate-500">Previous</span>
-						<span class="rounded-xl bg-cyan-400 px-4 py-2 font-semibold text-slate-950">1</span>
-						<span class="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-slate-300">2</span>
-						<span class="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-slate-300">3</span>
-						<span class="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-slate-300">Next</span>
+					<div class="flex flex-col gap-4 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between">
+						<div>
+							{{ $posts->onEachSide(1)->links() }}
+						</div>
 					</div>
 				</div>
 			</section>

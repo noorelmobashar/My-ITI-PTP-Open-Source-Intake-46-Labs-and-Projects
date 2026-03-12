@@ -19,19 +19,19 @@
                         @method('PUT')
 						<div>
 							<label for="title" class="mb-3 block text-sm font-medium text-slate-200">Title</label>
-							<input id="title" type="text" value={{ $post['title'] }} class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/10">
+							<input name="title" id="title" type="text" value="{{ $post->title }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/10">
 						</div>
 
 						<div>
 							<label for="description" class="mb-3 block text-sm font-medium text-slate-200">Description</label>
-							<textarea id="description" rows="6" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/10">{{ $post['description'] }}</textarea>
+							<textarea name="description" id="description" rows="6" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/10">{{ $post->description }}</textarea>
 						</div>
 
 						<div>
 							<label for="creator" class="mb-3 block text-sm font-medium text-slate-200">Post Creator</label>
-							<select id="creator" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/10">
+							<select name="user_id" id="creator" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/10">
 								@foreach ($creators as $creator)
-								    <option class="bg-slate-900 px-4 py-3 text-white">{{$creator['name']}}</option>
+								    <option class="bg-slate-900 px-4 py-3 text-white" value="{{ $creator->id }}" {{ $post->user_id == $creator->id ? 'selected' : '' }}>{{ $creator->name }}</option>
                                 @endforeach
 							</select>       
 						</div>
