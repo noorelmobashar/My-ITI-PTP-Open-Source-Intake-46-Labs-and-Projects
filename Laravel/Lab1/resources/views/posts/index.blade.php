@@ -61,6 +61,7 @@
 								<th class="px-8 py-5">#</th>
 								<th class="px-8 py-5">Title</th>
 								<th class="px-8 py-5">Posted By</th>
+								<th class="px-8 py-5">Slug</th>
 								<th class="px-8 py-5">Created At</th>
 								<th class="px-8 py-5 text-right">Actions</th>
 							</tr>
@@ -74,16 +75,17 @@
                                         <div class="font-medium text-white">{{ $post->title }}</div>
                                     </td>
                                     <td class="px-8 py-5 text-slate-300">{{ $post->user->name }}</td>
+									<td class="px-8 py-5 text-slate-300">{{ $post->slug }}</td>
                                     <td class="px-8 py-5 text-slate-300">{{ $post->created_at->format('Y-m-d') }}</td>
                                     <td class="px-8 py-5">
                                         <div class="flex justify-end gap-2">
-											<x-button href="{{ route('posts.show', ['id' => $post->id]) }}" variant="view" class="rounded-xl px-4 py-2">
+											<x-button href="{{ route('posts.show', ['slug' => $post->slug]) }}" variant="view" class="rounded-xl px-4 py-2">
 												View
 											</x-button>
-											<x-button href="{{ route('posts.edit', ['id' => $post->id]) }}" variant="edit" class="rounded-xl px-4 py-2">
+											<x-button href="{{ route('posts.edit', ['slug' => $post->slug]) }}" variant="edit" class="rounded-xl px-4 py-2">
 												Edit
 											</x-button>
-                                            <form method="POST" action="{{ route('posts.destroy', ['id' => $post->id]) }}" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                            <form method="POST" action="{{ route('posts.destroy', ['slug' => $post->slug]) }}" onsubmit="return confirm('Are you sure you want to delete this post?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <x-button type="submit" variant="delete" class="rounded-xl px-4 py-2">

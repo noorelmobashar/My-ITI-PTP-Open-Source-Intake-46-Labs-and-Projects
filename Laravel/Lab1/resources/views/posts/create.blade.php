@@ -57,16 +57,23 @@
 				</div>
 
 				<div class="px-6 py-6 lg:px-8 lg:py-8">
-					<form method="POST" action="{{ route('posts.store') }}" class="space-y-6">
+
+					<form method="POST" action="{{ route('posts.store') }}" class="space-y-6" enctype="multipart/form-data">
 						@csrf
 						<div>
 							<label for="title" class="mb-3 block text-sm font-medium text-slate-200">Title</label>
 							<input id="title" name="title" type="text" placeholder="Enter post title" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-400/10">
+							@error('title')
+								<p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+							@enderror
 						</div>
 
 						<div>
 							<label for="description" class="mb-3 block text-sm font-medium text-slate-200">Description</label>
 							<textarea id="description" name="description" rows="6" placeholder="Write a concise and engaging description..." class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-400/10"></textarea>
+							@error('description')
+								<p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+							@enderror
 						</div>
 
 						<div>
@@ -77,6 +84,17 @@
 									<option class="bg-slate-900 px-4 py-3 text-white" value={{ $creator->id }} selected>{{ $creator->name }}</option>
 								@endforeach
 							</select>
+							@error('user_id')
+								<p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+							@enderror
+						</div>
+
+						<div>
+							<label for="image" class="mb-3 block text-sm font-medium text-slate-200">Image</label>
+							<input id="image" name="image" type="file" accept="image/jpeg, image/png" placeholder="Enter image URL (optional)" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-400/10">
+							@error('image')
+								<p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+							@enderror
 						</div>
 
 						<div class="flex flex-wrap items-center gap-4 pt-2">

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -16,9 +18,9 @@ class PostController extends Controller
         return view('posts.index', ['posts' => $posts]);
     }
 
-    public function show($id)
+    public function show($slug)
     {
-        $post = Post::find($id);
+        $post = Post::where('slug', $slug)->first();
         if (! $post) {
             return abort(404);
         }
@@ -33,10 +35,10 @@ class PostController extends Controller
         return view('posts.create', ['creators' => $creators]);
     }
 
-    public function edit($id)
+    public function edit($slug)
     {
         $creators = User::all();
-        $post = Post::find($id);
+        $post = Post::where('slug', $slug)->first();
         if (! $post) {
             return abort(404);
         }
@@ -44,30 +46,47 @@ class PostController extends Controller
         return view('posts.edit', ['post' => $post, 'creators' => $creators]);
     }
 
-    public function store()
+    public function store(StorePostRequest $request)
     {
-        Post::create([
-            'title' => request('title'),
-            'description' => request('description'),
-            'user_id' => request('user_id'),
-        ]);
+        $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('images', 'public');
+        }
+
+        Post::create($data);
 
         return to_route('posts.index');
     }
 
-    public function update()
+    public function update(StorePostRequest $request, $slug)
     {
-        $post = Post::query()->whereKey((int) request('id'))->firstOrFail();
+        $post = Post::query()->where('slug', $slug)->firstOrFail();
+        $data = $request->validated();
 
-        $post->update(request()->only(['title', 'description', 'user_id']));
-        $post->save();
+        if ($request->hasFile('image')) {
+            if ($post->image) {
+                Storage::disk('public')->delete($post->image);
+            }
+            $data['image'] = $request->file('image')->store('images', 'public');
+        } else {
+            unset($data['image']);
+        }
+
+        $post->update($data);
 
         return to_route('posts.index');
     }
 
-    public function destroy($id)
+    public function destroy($slug)
     {
-        Post::destroy($id);
+        $post = Post::query()->where('slug', $slug)->firstOrFail();
+
+        if ($post->image) {
+            Storage::disk('public')->delete($post->image);
+        }
+
+        $post->delete();
 
         return to_route('posts.index');
     }

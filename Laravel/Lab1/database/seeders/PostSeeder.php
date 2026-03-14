@@ -13,7 +13,7 @@ class PostSeeder extends Seeder
      */
     public function run(): void
     {
-        Post::query()->delete();
+        Post::truncate();
 
         $users = User::factory()->count(50)->create();
 

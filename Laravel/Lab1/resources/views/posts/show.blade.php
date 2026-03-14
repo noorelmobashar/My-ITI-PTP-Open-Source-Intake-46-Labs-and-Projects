@@ -26,6 +26,11 @@
 							</p>
 						</div>
 					</div>
+					<div class="px-6 py-6 lg:px-8 lg:py-8">
+						@if ($post->image)
+							<img src="{{ asset('storage/' . $post->image) }}" alt="Post Image" class="w-full rounded-2xl border border-white/10 bg-white/5 object-cover">
+						@endif
+					</div>
 				</article>
 
 				<article class="rounded-[2rem] border border-white/10 bg-slate-900/60 shadow-2xl shadow-slate-950/50 backdrop-blur-xl">
