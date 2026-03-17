@@ -20,12 +20,18 @@ class PostController extends Controller
 
     public function show($slug)
     {
-        $post = Post::where('slug', $slug)->first();
+        $post = Post::query()
+            ->with(['user', 'comments.user'])
+            ->where('slug', $slug)
+            ->first();
+
         if (! $post) {
             return abort(404);
         }
 
-        return view('posts.show', ['post' => $post]);
+        $commenters = User::all();
+
+        return view('posts.show', ['post' => $post, 'commenters' => $commenters]);
     }
 
     public function create()

@@ -1,24 +1,18 @@
 <script setup>
-import { onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
+import { useProductStore } from '@/stores/productStore'
 
-defineProps({
-  products: {
-    type: Array,
-    required: true,
-  },
-  cartItemCount: {
-    type: Number,
-    required: true,
-  },
-})
+const productStore = useProductStore()
+const products = computed(() => productStore.products)
 
 function getDiscountedPrice(product) {
   return product.price - (product.price * product.discount) / 100
 }
 
 onMounted(() => {
+  productStore.fetchAllProducts()
   console.log('ProductsView mounted')
 })
 
@@ -34,7 +28,7 @@ onUnmounted(() => {
       <div class="absolute right-0 top-32 h-96 w-96 rounded-full bg-secondary/20 blur-3xl"></div>
       <div class="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-accent/20 blur-3xl"></div>
     </div>
-    <AppHeader storeName="Abibos" :cartItemCount="cartItemCount" />
+    <AppHeader />
     <main class="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <section class="mb-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
@@ -114,6 +108,6 @@ onUnmounted(() => {
         </RouterLink>
       </section>
     </main>
-    <AppFooter storeName="Abibos" />
+    <AppFooter />
   </div>
 </template>

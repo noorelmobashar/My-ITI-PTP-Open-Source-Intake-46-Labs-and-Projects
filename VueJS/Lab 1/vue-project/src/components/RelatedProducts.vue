@@ -1,11 +1,19 @@
 <script setup>
-import { onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
+import { useProductStore } from '@/stores/productStore'
 
-defineProps({
-  products: {
-    type: Array,
+const props = defineProps({
+  current_product_id: {
+    type: Number,
     required: true
   }
+})
+console.log('RelatedProducts received current_product_id:', props.current_product_id);
+const productStore = useProductStore();
+const products = computed(() => {
+  return productStore.products
+    .filter((p) => p.id !== props.current_product_id)
+    .slice(0, 3)
 })
 
 function getDiscountedPrice(item) {
@@ -49,8 +57,7 @@ onUnmounted(() => {
           <h4 class="card-title text-xl font-bold text-white">{{ item.name }}</h4>
           <p class="text-sm text-slate-400">Stock: <span class="font-semibold text-white">{{ item.stock }}</span></p>
           <div class="flex items-center flex-wrap gap-2">
-            
-                <span v-if="item.discount > 0" class="mr-1 text-slate-500 line-through">
+            <span v-if="item.discount > 0" class="mr-1 text-slate-500 line-through">
               ${{ item.price }}
             </span>
             <span class="text-2xl font-black text-white">${{ getDiscountedPrice(item) }}</span>

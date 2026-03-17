@@ -1,12 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted } from 'vue'
 
-defineProps({
-  storeName: {
-    type: String,
-    required: true
-  }
-})
+const storeName = "Abibos"
 
 onMounted(() => {
   console.log('AppFooter mounted')

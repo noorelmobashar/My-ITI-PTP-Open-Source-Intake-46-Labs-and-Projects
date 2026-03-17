@@ -3,13 +3,6 @@ import { onMounted, onUnmounted } from 'vue'
 import AppHeader from '@/components/AppHeader.vue'
 import AppFooter from '@/components/AppFooter.vue'
 
-const props = defineProps({
-  cartItemCount: {
-    type: Number,
-    required: true,
-  },
-})
-
 const highlights = [
     {
         label: 'Craftsmanship first',
@@ -67,7 +60,7 @@ onUnmounted(() => {
             <div class="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-accent/20 blur-3xl"></div>
         </div>
 
-        <AppHeader storeName="Abibos" :cartItemCount="cartItemCount" />
+        <AppHeader/>
         <main class="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
             <section class="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
                 <div>
@@ -179,6 +172,6 @@ onUnmounted(() => {
                 </div>
             </section>
         </main>
-        <AppFooter storeName="Abibos" />
+        <AppFooter />
     </div>
 </template>

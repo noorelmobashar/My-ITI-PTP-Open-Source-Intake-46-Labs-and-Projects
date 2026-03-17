@@ -2,21 +2,17 @@
 import { computed, onMounted, onUnmounted } from 'vue'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
+import { useProductStore } from '@/stores/productStore'
 
-const props = defineProps({
-  products: {
-    type: Array,
-    required: true,
-  },
-  cartItemCount: {
-    type: Number,
-    required: true,
-  },
-})
+const productStore = useProductStore()
+const products = computed(() => productStore.products)
 
-const featuredProducts = computed(() => props.products.slice(0, 3))
+const featuredProducts = computed(() => products.value.slice(1, 4))
+
+const isLoading = computed(() => productStore.loading)
 
 onMounted(() => {
+  productStore.fetchAllProducts()
   console.log('HomeView mounted')
 })
 
@@ -27,6 +23,11 @@ onUnmounted(() => {
 
 <template>
 
+  <!-- loading state -->
+  <div v-if="isLoading" class="flex h-screen items-center justify-center bg-slate-950 text-base-content">
+    <span class="loading loading-spinner loading-lg text-primary"></span>
+  </div>
+
   <div class="min-h-screen bg-slate-950 text-base-content">
     <div class="pointer-events-none absolute inset-0 overflow-hidden">
       <div class="absolute -left-20 top-0 h-72 w-72 rounded-full bg-primary/20 blur-3xl"></div>
@@ -34,7 +35,7 @@ onUnmounted(() => {
       <div class="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-accent/20 blur-3xl"></div>
     </div>
 
-    <AppHeader storeName="Abibos" :cartItemCount="cartItemCount"/>
+    <AppHeader />
 
     <main class="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <section class="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
@@ -148,6 +149,6 @@ onUnmounted(() => {
         </div>
       </section>
     </main>
-    <AppFooter storeName="Abibos" />
+    <AppFooter />
   </div>
 </template>

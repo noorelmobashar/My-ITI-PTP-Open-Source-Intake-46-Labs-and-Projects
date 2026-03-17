@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\PostController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -36,5 +37,6 @@ Route::get('/posts/{slug}/edit', [PostController::class, 'edit'])->name('posts.e
 Route::put('/posts/{slug}', [PostController::class, 'update'])->name('posts.update');
 
 Route::get('/posts/{slug}', [PostController::class, 'show'])->name('posts.show');
+Route::post('/posts/{slug}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
 
 Route::delete('/posts/{slug}', [PostController::class, 'destroy'])->name('posts.destroy');

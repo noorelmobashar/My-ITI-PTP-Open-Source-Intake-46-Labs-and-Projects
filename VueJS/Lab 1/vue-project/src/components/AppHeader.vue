@@ -1,16 +1,10 @@
 <script setup>
-import { onMounted, onUnmounted } from "vue";
+import { computed, onMounted, onUnmounted } from "vue";
+import { useCartStore } from "@/stores/cartStore";
 
-defineProps({
-  storeName: {
-    type: String,
-    required: true,
-  },
-  cartItemCount: {
-    type: Number,
-    required: true,
-  },
-});
+const cartStore = useCartStore();
+const cartItemCount = computed(() => cartStore.totalItems);
+const storeName = "Abibos";
 
 onMounted(() => {
   console.log("AppHeader mounted");
@@ -46,7 +40,7 @@ onUnmounted(() => {
           >About</RouterLink
         >
         <!--making cart icon with a red badge counter-->
-        <div class="relative">
+        <RouterLink to="/cart" class="relative transition hover:text-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6"
@@ -66,7 +60,7 @@ onUnmounted(() => {
           >
             {{ cartItemCount }}
           </span>
-        </div>
+        </RouterLink>
       </nav>
 
       <div class="flex-none">

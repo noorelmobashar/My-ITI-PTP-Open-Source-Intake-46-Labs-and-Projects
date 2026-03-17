@@ -6,40 +6,17 @@ import HeroSection from '../components/HeroSection.vue'
 import ProductCard from '../components/ProductCard.vue'
 import RelatedProducts from '../components/RelatedProducts.vue'
 import AppFooter from '../components/AppFooter.vue'
+import { useProductStore } from '@/stores/productStore'
 
-const props = defineProps({
-  products: {
-    type: Array,
-    required: true,
-  },
-  cartItemCount: {
-    type: Number,
-    required: true,
-  },
-})
+const route = useRoute();
+const productStore = useProductStore();
 
-const emit = defineEmits(['decrease-stock']);
-const forwardDecreaseStock = (productId) => {
-  emit('decrease-stock', productId);
-}
+const productId = Number(route.params.id);
+const product = computed(() => productStore.products.find(p => p.id === productId) ?? null)
 
-const route = useRoute()
-
-const productId = computed(() => Number(route.params.id))
-
-const product = computed(() => {
-  return props.products.find((item) => item.id === productId.value) ?? null
-})
-
-const relatedProducts = computed(() => {
-  if (!product.value) {
-    return []
-  }
-
-  return props.products.filter((item) => item.id !== product.value.id).slice(0, 3)
-})
 
 onMounted(() => {
+  productStore.fetchAllProducts()
   console.log('ProductView mounted')
 })
 
@@ -55,17 +32,20 @@ onUnmounted(() => {
       <div class="absolute right-0 top-40 h-80 w-80 rounded-full bg-secondary/20 blur-3xl"></div>
       <div class="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-accent/20 blur-3xl"></div>
     </div>
-    <AppHeader storeName="Abibos" :cartItemCount="cartItemCount"/>
-    <main v-if="product" class="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+    <AppHeader />
+    <div v-if="productStore.loading || productStore.products.length === 0" class="flex h-96 items-center justify-center">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+    <main v-else-if="product" class="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
         <RouterLink to="/products" class="btn btn-ghost rounded-full px-6 text-white hover:bg-white/10 hover:text-white">
           ← Back to products
         </RouterLink>
       </div>
 
-      <HeroSection :discount="product.discount" />
-      <ProductCard :product="product" @decrease-stock="forwardDecreaseStock"/>
-      <RelatedProducts :products="relatedProducts" />
+      <HeroSection />
+      <ProductCard :product_id="productId" />
+      <RelatedProducts :current_product_id="productId" />
     </main>
 
     <main v-else class="relative mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8">
@@ -87,6 +67,6 @@ onUnmounted(() => {
         </div>
       </div>
     </main>
-    <AppFooter storeName="Abibos" />
+    <AppFooter />
   </div>
 </template>

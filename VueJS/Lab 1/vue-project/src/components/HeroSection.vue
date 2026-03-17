@@ -1,12 +1,6 @@
 <script setup>
 import { onMounted, onUnmounted } from 'vue'
 
-defineProps({
-  discount: {
-    type: Number,
-    required: true
-  }
-})
 
 onMounted(() => {
   console.log('HeroSection mounted')
@@ -29,8 +23,6 @@ onUnmounted(() => {
     
     <div class="stats border border-white/10 bg-white/5 shadow-2xl backdrop-blur">
       <div class="stat px-6 py-4">
-        <div class="stat-title text-slate-300">Discount</div>
-        <div class="stat-value text-primary">{{ discount }}%</div>
         <div class="stat-desc text-slate-400">Limited-time deal</div>
       </div>
     </div>
