@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sorting Lab</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="page-shell">
+    <section class="panel hero-panel">
+      <div>
+        <p class="eyebrow">Sorting Lab</p>
+        <h1>Compare algorithms, animate them on canvas, and call QuickSort over REST.</h1>
+        <p class="hero-copy">
+          Pick a sorting strategy, watch it unfold in the visualizer, and use the parallel QuickSort API to fan work out across worker threads.
+        </p>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-card">
+          <span class="stat-label">Algorithms</span>
+          <strong id="algorithmCount">0</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">API Status</span>
+          <strong id="apiStatus">Checking...</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="workspace-grid">
+      <article class="panel control-panel">
+        <div class="section-heading">
+          <h2>Controls</h2>
+          <p>Enter comma-separated numbers to sort and visualize.</p>
+        </div>
+
+        <label for="arrayInput">Array of numbers</label>
+        <textarea id="arrayInput" rows="5" placeholder="18, 5, 13, 2, 21, 8, 3, 34, 1"></textarea>
+
+        <div class="control-grid">
+          <div>
+            <label for="algorithmSelect">Sorting algorithm</label>
+            <select id="algorithmSelect"></select>
+          </div>
+
+          <div>
+            <label for="animationSpeedInput">Animation speed</label>
+            <div class="range-row">
+              <input id="animationSpeedInput" type="range" min="1" max="100" value="62" />
+              <span id="animationSpeedValue" class="range-value">62%</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="algorithmHelper" class="helper-card">
+          Select an algorithm to see how it behaves.
+        </div>
+
+        <div class="actions">
+          <button id="sortButton">Sort & Visualize</button>
+          <button id="fillSampleButton" class="secondary">Load Sample</button>
+          <button id="randomizeButton" class="secondary">Randomize</button>
+        </div>
+
+        <div class="result-box">
+          <div class="result-head">
+            <h2>Sorted Result</h2>
+            <span id="resultMode" class="pill">Waiting</span>
+          </div>
+          <div id="result" class="result">No result yet.</div>
+        </div>
+      </article>
+
+      <article class="panel visual-panel">
+        <div class="section-heading">
+          <h2>Canvas Visualizer</h2>
+          <p id="visualizationCaption">Load data to render the current array state.</p>
+        </div>
+
+        <div class="canvas-shell">
+          <canvas id="visualizerCanvas" width="960" height="420" aria-label="Sorting visualization"></canvas>
+        </div>
+
+        <div class="legend">
+          <span><i class="legend-swatch default"></i>Array values</span>
+          <span><i class="legend-swatch active"></i>Active comparison</span>
+          <span><i class="legend-swatch pivot"></i>Pivot or focus</span>
+          <span><i class="legend-swatch sorted"></i>Sorted state</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel benchmark-panel">
+      <div class="section-heading">
+        <h2>Benchmark</h2>
+        <p>Runs the browser-side algorithms on the current input. The parallel QuickSort path is exposed through the REST API instead of the browser benchmark.</p>
+      </div>
+
+      <div class="benchmark-controls">
+        <div>
+          <label for="iterationsInput">Benchmark iterations</label>
+          <input id="iterationsInput" type="number" min="1" value="50" />
+        </div>
+
+        <button id="benchmarkButton" class="wide-button">Run Benchmark</button>
+      </div>
+
+      <div id="benchmarkResult" class="result">No benchmark run yet.</div>
+    </section>
+
+    <section class="panel api-panel">
+      <div class="section-heading">
+        <h2>REST API</h2>
+        <p>Serve the app with <code>npm start</code> to enable worker-thread QuickSort and JSON endpoints.</p>
+      </div>
+
+      <div class="api-grid">
+        <div class="api-card">
+          <h3>POST <code>/api/quicksort</code></h3>
+          <p>Body: <code>{ "numbers": [5, 3, 1], "parallel": true }</code></p>
+        </div>
+        <div class="api-card">
+          <h3>POST <code>/api/sort</code></h3>
+          <p>Body: <code>{ "algorithm": "merge-sort", "numbers": [5, 3, 1] }</code></p>
+        </div>
+        <div class="api-card">
+          <h3>GET <code>/api/algorithms</code></h3>
+          <p>Lists every available algorithm, including <code>parallel-quick-sort</code>.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="sortingAlgorithms.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

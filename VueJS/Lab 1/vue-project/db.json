@@ -8,13 +8,13 @@
       "badge": "NEW",
       "price": 120,
       "discount": 20,
-      "stock": 4,
+      "stock": 0,
       "tags": [
         "Fashion",
         "Casual",
         "Sport"
       ],
-      "isAvailable": true
+      "isAvailable": false
     },
     {
       "id": "2",
@@ -24,7 +24,7 @@
       "badge": "",
       "price": 90,
       "discount": 10,
-      "stock": 5,
+      "stock": 2,
       "tags": [
         "Sport",
         "Running"
@@ -39,7 +39,7 @@
       "badge": "SALE",
       "price": 150,
       "discount": 0,
-      "stock": 8,
+      "stock": 6,
       "tags": [
         "Casual",
         "Winter"

@@ -11,8 +11,10 @@ import { useProductStore } from '@/stores/productStore'
 const route = useRoute();
 const productStore = useProductStore();
 
-const productId = Number(route.params.id);
-const product = computed(() => productStore.products.find(p => p.id === productId) ?? null)
+const productId = computed(() => Number(route.params.id));
+const product = computed(() =>
+  productStore.products.find(p => p.id === productId.value) ?? null
+)
 
 
 onMounted(() => {

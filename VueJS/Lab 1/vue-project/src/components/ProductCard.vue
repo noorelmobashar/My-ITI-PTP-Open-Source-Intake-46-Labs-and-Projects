@@ -76,9 +76,10 @@ onUnmounted(() => {
         <span v-if="product.discount > 0" class="mr-3 text-lg text-slate-500 line-through">
           ${{ product.price }}
         </span>
+
         <span
           class="text-4xl font-black tracking-tight"
-          :style="{ color: product.discount > 0 ? '#16a34a' : '' }"
+          :style="{ color: product.discount > 0 ? '#16a34a' : '#ffffff' }"
         >
           ${{ discountedPrice }}
         </span>
@@ -100,7 +101,7 @@ onUnmounted(() => {
           :disabled="!product.isAvailable"
           @click="buyProduct"
         >
-          {{ product.isAvailable ? 'Buy Now' : 'Out of Stock' }}
+          {{ product.isAvailable ? 'Add to Cart' : 'Out of Stock' }}
         </button>
       </div>
 
