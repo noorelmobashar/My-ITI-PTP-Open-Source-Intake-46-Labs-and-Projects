@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pulse Chat</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="canvas" aria-hidden="true">
+      <div class="grid-glow"></div>
+    </div>
+
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <div class="app-shell" id="appShell">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="brand-lockup">
+            <div class="brand-mark">P</div>
+            <div>
+              <p class="sidebar-label">Workspace</p>
+              <h1>Pulse Chat</h1>
+            </div>
+          </div>
+          <button class="icon-button only-mobile" id="sidebarCloseButton" aria-label="Close sidebar">
+            &#10005;
+          </button>
+        </div>
+
+        <button class="new-chat-button" id="newChatButton">+ New chat</button>
+
+        <div class="sidebar-label section-label">Chats</div>
+        <div class="chat-list" id="chatList" aria-label="Chat history"></div>
+
+        <footer class="sidebar-footer">
+          <p>Switch models per chat. Voice works when an audio model is selected.</p>
+        </footer>
+      </aside>
+
+      <main class="chat-shell">
+        <header class="chat-header">
+          <div class="header-left">
+            <button class="icon-button only-mobile" id="sidebarOpenButton" aria-label="Open sidebar">
+              &#9776;
+            </button>
+            <div class="title-block">
+              <h2 id="activeChatTitle">New chat</h2>
+              <p id="activeChatMeta">Pick a model and start chatting.</p>
+            </div>
+          </div>
+
+          <div class="header-actions">
+            <span class="capability-badge" id="modelCapabilityBadge">Text only</span>
+
+            <label class="model-picker" for="modelSelect">
+              <span>Model</span>
+              <select id="modelSelect" aria-label="Model picker"></select>
+            </label>
+
+            <button class="ghost-button" id="deleteChatButton">Delete</button>
+          </div>
+        </header>
+
+        <section class="messages" id="messages" aria-live="polite" aria-label="Messages"></section>
+
+        <footer class="composer">
+          <div class="composer-toolbar">
+            <input type="file" id="imageInput" accept="image/*" hidden />
+            <button type="button" class="tool-button" id="attachImageButton">Attach photo</button>
+            <button type="button" class="tool-button" id="recordButton">Start voice</button>
+            <button type="button" class="tool-button" id="voiceReplyButton">Voice reply off</button>
+            <button type="button" class="tool-button" id="regenerateButton">Re-generate</button>
+            <button type="button" class="tool-button" id="editLastPromptButton">Edit last prompt</button>
+            <button type="button" class="tool-button" id="deleteLastPromptButton">Delete last prompt</button>
+            <span class="audio-status" id="audioStatus">Choose an audio model to use voice.</span>
+          </div>
+
+          <div class="attachment-preview hidden" id="attachmentPreview"></div>
+
+          <div class="composer-shell">
+            <textarea
+              id="messageInput"
+              rows="1"
+              maxlength="12000"
+              placeholder="Message Pulse Chat"
+            ></textarea>
+            <button id="sendButton" class="send-button">Send</button>
+          </div>
+
+          <div class="composer-meta">
+            <span id="streamStatus">Ready</span>
+            <span>Enter to send, Shift+Enter for a new line</span>
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,155 @@
+{
+  "generated_at_epoch": 1774786475,
+  "base_url": "http://127.0.0.1:8000",
+  "prompt": "Reply with exactly OK.",
+  "total": 16,
+  "passed": 16,
+  "failed": 0,
+  "pass_rate_percent": 100.0,
+  "results": [
+    {
+      "model_id": "gpt-5",
+      "label": "GPT-5",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 1,
+      "preview": "OK",
+      "elapsed_seconds": 2.93
+    },
+    {
+      "model_id": "gpt-5-mini",
+      "label": "GPT-5 Mini",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 1,
+      "preview": "OK",
+      "elapsed_seconds": 2.87
+    },
+    {
+      "model_id": "gpt-5-nano",
+      "label": "GPT-5 Nano",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 1,
+      "preview": "OK",
+      "elapsed_seconds": 2.042
+    },
+    {
+      "model_id": "gpt-4o",
+      "label": "GPT-4o",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 1,
+      "preview": "OK",
+      "elapsed_seconds": 1.02
+    },
+    {
+      "model_id": "gpt-4o-mini",
+      "label": "GPT-4o Mini",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 2,
+      "preview": "OK.",
+      "elapsed_seconds": 1.225
+    },
+    {
+      "model_id": "gpt-4.1",
+      "label": "GPT-4.1",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 1,
+      "preview": "OK",
+      "elapsed_seconds": 1.534
+    },
+    {
+      "model_id": "gpt-4.1-mini",
+      "label": "GPT-4.1 Mini",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 1,
+      "preview": "OK",
+      "elapsed_seconds": 1.534
+    },
+    {
+      "model_id": "gpt-4.1-nano",
+      "label": "GPT-4.1 Nano",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 1,
+      "preview": "OK",
+      "elapsed_seconds": 1.533
+    },
+    {
+      "model_id": "meta-llama-3.1-8b-instruct",
+      "label": "Llama 3.1 8B Instruct",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 2,
+      "preview": "OK.",
+      "elapsed_seconds": 1.225
+    },
+    {
+      "model_id": "meta-llama-3.1-405b-instruct",
+      "label": "Llama 3.1 405B Instruct",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 1,
+      "preview": "OK",
+      "elapsed_seconds": 1.225
+    },
+    {
+      "model_id": "codestral-2501",
+      "label": "Codestral 2501",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 1,
+      "preview": "OK",
+      "elapsed_seconds": 0.714
+    },
+    {
+      "model_id": "ministral-3b",
+      "label": "Ministral 3B",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 1,
+      "preview": "OK",
+      "elapsed_seconds": 0.794
+    },
+    {
+      "model_id": "phi-4",
+      "label": "Phi-4",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 2,
+      "preview": "OK.",
+      "elapsed_seconds": 1.138
+    },
+    {
+      "model_id": "deepseek-r1",
+      "label": "DeepSeek R1",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 47,
+      "preview": "<think>\nOkay, the user wants me to reply with exactly \"OK.\" Let me make sure I understand the instruction correctly. They said \"Reply with exactly OK.\" So I nee",
+      "elapsed_seconds": 2.043
+    },
+    {
+      "model_id": "grok-3",
+      "label": "Grok 3",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 1,
+      "preview": "OK",
+      "elapsed_seconds": 1.739
+    },
+    {
+      "model_id": "grok-3-mini",
+      "label": "Grok 3 Mini",
+      "status": "pass",
+      "reason": "ok",
+      "token_count": 1,
+      "preview": "OK",
+      "elapsed_seconds": 1.941
+    }
+  ]
+}

@@ -1,0 +1,395 @@
+{
+  "generated_at_epoch": 1774786003,
+  "base_url": "https://models.inference.ai.azure.com",
+  "total": 51,
+  "passed": 13,
+  "failed": 38,
+  "pass_rate_percent": 25.49,
+  "passed_models": [
+    "gpt-4o",
+    "gpt-4o-mini",
+    "gpt-4.1",
+    "gpt-4.1-mini",
+    "gpt-4.1-nano",
+    "meta-llama-3.1-8b-instruct",
+    "meta-llama-3.1-405b-instruct",
+    "codestral-2501",
+    "ministral-3b",
+    "phi-4",
+    "deepseek-r1",
+    "grok-3",
+    "grok-3-mini"
+  ],
+  "results": [
+    {
+      "model_id": "gpt-4o",
+      "status": "pass",
+      "http_status": 200,
+      "reason": "ok",
+      "elapsed_seconds": 1.353,
+      "preview": "OK"
+    },
+    {
+      "model_id": "gpt-4o-mini",
+      "status": "pass",
+      "http_status": 200,
+      "reason": "ok",
+      "elapsed_seconds": 1.33,
+      "preview": "OK."
+    },
+    {
+      "model_id": "gpt-4.1",
+      "status": "pass",
+      "http_status": 200,
+      "reason": "ok",
+      "elapsed_seconds": 1.327,
+      "preview": "OK"
+    },
+    {
+      "model_id": "gpt-4.1-mini",
+      "status": "pass",
+      "http_status": 200,
+      "reason": "ok",
+      "elapsed_seconds": 0.728,
+      "preview": "OK"
+    },
+    {
+      "model_id": "gpt-4.1-nano",
+      "status": "pass",
+      "http_status": 200,
+      "reason": "ok",
+      "elapsed_seconds": 0.92,
+      "preview": "OK"
+    },
+    {
+      "model_id": "o1",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{   \"error\": {     \"message\": \"Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.\",     \"type\": \"invalid_request_error\",     \"param\": \"max_tokens\",     \"code\": \"unsupported_parameter\"   } }",
+      "elapsed_seconds": 0.503
+    },
+    {
+      "model_id": "o1-mini",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"BadRequest\",\"message\":\"Model o4-mini is enabled only for api versions 2024-12-01-preview and later\"}}",
+      "elapsed_seconds": 0.207
+    },
+    {
+      "model_id": "o3",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{   \"error\": {     \"message\": \"Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.\",     \"type\": \"invalid_request_error\",     \"param\": \"max_tokens\",     \"code\": \"unsupported_parameter\"   } }",
+      "elapsed_seconds": 0.433
+    },
+    {
+      "model_id": "o3-mini",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{   \"error\": {     \"message\": \"Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.\",     \"type\": \"invalid_request_error\",     \"param\": \"max_tokens\",     \"code\": \"unsupported_parameter\"   } }",
+      "elapsed_seconds": 0.793
+    },
+    {
+      "model_id": "o4-mini",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{   \"error\": {     \"message\": \"Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.\",     \"type\": \"invalid_request_error\",     \"param\": \"max_tokens\",     \"code\": \"unsupported_parameter\"   } }",
+      "elapsed_seconds": 0.516
+    },
+    {
+      "model_id": "gpt-4-turbo",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: gpt-4-turbo\",\"details\":\"Unknown model: gpt-4-turbo\"}}",
+      "elapsed_seconds": 0.204
+    },
+    {
+      "model_id": "gpt-4",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: gpt-4\",\"details\":\"Unknown model: gpt-4\"}}",
+      "elapsed_seconds": 0.202
+    },
+    {
+      "model_id": "gpt-3.5-turbo",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: gpt-3.5-turbo\",\"details\":\"Unknown model: gpt-3.5-turbo\"}}",
+      "elapsed_seconds": 0.107
+    },
+    {
+      "model_id": "claude-3-haiku",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: claude-3-haiku\",\"details\":\"Unknown model: claude-3-haiku\"}}",
+      "elapsed_seconds": 0.202
+    },
+    {
+      "model_id": "claude-3.5-haiku",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: claude-3.5-haiku\",\"details\":\"Unknown model: claude-3.5-haiku\"}}",
+      "elapsed_seconds": 0.183
+    },
+    {
+      "model_id": "claude-3.5-sonnet",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: claude-3.5-sonnet\",\"details\":\"Unknown model: claude-3.5-sonnet\"}}",
+      "elapsed_seconds": 0.225
+    },
+    {
+      "model_id": "claude-3.7-sonnet",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: claude-3.7-sonnet\",\"details\":\"Unknown model: claude-3.7-sonnet\"}}",
+      "elapsed_seconds": 0.106
+    },
+    {
+      "model_id": "claude-3-opus",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: claude-3-opus\",\"details\":\"Unknown model: claude-3-opus\"}}",
+      "elapsed_seconds": 0.2
+    },
+    {
+      "model_id": "claude-sonnet-4",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: claude-sonnet-4\",\"details\":\"Unknown model: claude-sonnet-4\"}}",
+      "elapsed_seconds": 0.202
+    },
+    {
+      "model_id": "meta-llama-3-8b-instruct",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: meta-llama-3-8b-instruct\",\"details\":\"Unknown model: meta-llama-3-8b-instruct\"}}",
+      "elapsed_seconds": 0.109
+    },
+    {
+      "model_id": "meta-llama-3-70b-instruct",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: meta-llama-3-70b-instruct\",\"details\":\"Unknown model: meta-llama-3-70b-instruct\"}}",
+      "elapsed_seconds": 0.204
+    },
+    {
+      "model_id": "meta-llama-3.1-8b-instruct",
+      "status": "pass",
+      "http_status": 200,
+      "reason": "ok",
+      "elapsed_seconds": 0.857,
+      "preview": "OK."
+    },
+    {
+      "model_id": "meta-llama-3.1-70b-instruct",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: meta-llama-3.1-70b-instruct\",\"details\":\"Unknown model: meta-llama-3.1-70b-instruct\"}}",
+      "elapsed_seconds": 0.17
+    },
+    {
+      "model_id": "meta-llama-3.1-405b-instruct",
+      "status": "pass",
+      "http_status": 200,
+      "reason": "ok",
+      "elapsed_seconds": 0.918,
+      "preview": "OK"
+    },
+    {
+      "model_id": "meta-llama-3.2-3b-instruct",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: meta-llama-3.2-3b-instruct\",\"details\":\"Unknown model: meta-llama-3.2-3b-instruct\"}}",
+      "elapsed_seconds": 0.203
+    },
+    {
+      "model_id": "meta-llama-3.2-11b-vision-instruct",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: meta-llama-3.2-11b-vision-instruct\",\"details\":\"Unknown model: meta-llama-3.2-11b-vision-instruct\"}}",
+      "elapsed_seconds": 0.104
+    },
+    {
+      "model_id": "meta-llama-3.2-90b-vision-instruct",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: meta-llama-3.2-90b-vision-instruct\",\"details\":\"Unknown model: meta-llama-3.2-90b-vision-instruct\"}}",
+      "elapsed_seconds": 0.2
+    },
+    {
+      "model_id": "meta-llama-3.3-70b-instruct",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: meta-llama-3.3-70b-instruct\",\"details\":\"Unknown model: meta-llama-3.3-70b-instruct\"}}",
+      "elapsed_seconds": 0.107
+    },
+    {
+      "model_id": "mistral-large",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: mistral-large\",\"details\":\"Unknown model: mistral-large\"}}",
+      "elapsed_seconds": 0.202
+    },
+    {
+      "model_id": "mistral-large-2407",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: mistral-large-2407\",\"details\":\"Unknown model: mistral-large-2407\"}}",
+      "elapsed_seconds": 0.162
+    },
+    {
+      "model_id": "mistral-small",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: mistral-small\",\"details\":\"Unknown model: mistral-small\"}}",
+      "elapsed_seconds": 0.149
+    },
+    {
+      "model_id": "mistral-nemo",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: mistral-nemo\",\"details\":\"Unknown model: mistral-nemo\"}}",
+      "elapsed_seconds": 0.199
+    },
+    {
+      "model_id": "codestral-latest",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: codestral-latest\",\"details\":\"Unknown model: codestral-latest\"}}",
+      "elapsed_seconds": 0.114
+    },
+    {
+      "model_id": "codestral-2501",
+      "status": "pass",
+      "http_status": 200,
+      "reason": "ok",
+      "elapsed_seconds": 0.709,
+      "preview": "OK"
+    },
+    {
+      "model_id": "ministral-8b",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: ministral-8b\",\"details\":\"Unknown model: ministral-8b\"}}",
+      "elapsed_seconds": 0.096
+    },
+    {
+      "model_id": "ministral-3b",
+      "status": "pass",
+      "http_status": 200,
+      "reason": "ok",
+      "elapsed_seconds": 0.715,
+      "preview": "OK"
+    },
+    {
+      "model_id": "phi-3-medium-4k-instruct",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: phi-3-medium-4k-instruct\",\"details\":\"Unknown model: phi-3-medium-4k-instruct\"}}",
+      "elapsed_seconds": 0.107
+    },
+    {
+      "model_id": "phi-3-medium-128k-instruct",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: phi-3-medium-128k-instruct\",\"details\":\"Unknown model: phi-3-medium-128k-instruct\"}}",
+      "elapsed_seconds": 0.102
+    },
+    {
+      "model_id": "phi-3.5-mini-instruct",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: phi-3.5-mini-instruct\",\"details\":\"Unknown model: phi-3.5-mini-instruct\"}}",
+      "elapsed_seconds": 0.111
+    },
+    {
+      "model_id": "phi-3.5-vision-instruct",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: phi-3.5-vision-instruct\",\"details\":\"Unknown model: phi-3.5-vision-instruct\"}}",
+      "elapsed_seconds": 0.099
+    },
+    {
+      "model_id": "phi-4",
+      "status": "pass",
+      "http_status": 200,
+      "reason": "ok",
+      "elapsed_seconds": 1.024,
+      "preview": "OK."
+    },
+    {
+      "model_id": "command-r",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: command-r\",\"details\":\"Unknown model: command-r\"}}",
+      "elapsed_seconds": 0.202
+    },
+    {
+      "model_id": "command-r-plus",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: command-r-plus\",\"details\":\"Unknown model: command-r-plus\"}}",
+      "elapsed_seconds": 0.1
+    },
+    {
+      "model_id": "command-a",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: command-a\",\"details\":\"Unknown model: command-a\"}}",
+      "elapsed_seconds": 0.205
+    },
+    {
+      "model_id": "jamba-1.5-mini",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: jamba-1.5-mini\",\"details\":\"Unknown model: jamba-1.5-mini\"}}",
+      "elapsed_seconds": 0.103
+    },
+    {
+      "model_id": "jamba-1.5-large",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: jamba-1.5-large\",\"details\":\"Unknown model: jamba-1.5-large\"}}",
+      "elapsed_seconds": 0.108
+    },
+    {
+      "model_id": "deepseek-r1",
+      "status": "pass",
+      "http_status": 200,
+      "reason": "ok",
+      "elapsed_seconds": 0.719,
+      "preview": "<think>\nOkay, the user wants me"
+    },
+    {
+      "model_id": "deepseek-v3",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: deepseek-v3\",\"details\":\"Unknown model: deepseek-v3\"}}",
+      "elapsed_seconds": 0.197
+    },
+    {
+      "model_id": "grok-2",
+      "status": "fail",
+      "http_status": 400,
+      "reason": "{\"error\":{\"code\":\"unknown_model\",\"message\":\"Unknown model: grok-2\",\"details\":\"Unknown model: grok-2\"}}",
+      "elapsed_seconds": 0.108
+    },
+    {
+      "model_id": "grok-3",
+      "status": "pass",
+      "http_status": 200,
+      "reason": "ok",
+      "elapsed_seconds": 1.845,
+      "preview": "OK"
+    },
+    {
+      "model_id": "grok-3-mini",
+      "status": "pass",
+      "http_status": 200,
+      "reason": "ok",
+      "elapsed_seconds": 0.814,
+      "preview": ""
+    }
+  ]
+}
