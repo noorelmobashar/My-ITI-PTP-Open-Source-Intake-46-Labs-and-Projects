@@ -44,9 +44,7 @@ const elements = {
   attachmentPreview: document.getElementById("attachmentPreview"),
   recordButton: document.getElementById("recordButton"),
   voiceReplyButton: document.getElementById("voiceReplyButton"),
-  regenerateButton: document.getElementById("regenerateButton"),
-  editLastPromptButton: document.getElementById("editLastPromptButton"),
-  deleteLastPromptButton: document.getElementById("deleteLastPromptButton"),
+  voiceReplyLabel: document.getElementById("voiceReplyLabel"),
   audioStatus: document.getElementById("audioStatus"),
   streamStatus: document.getElementById("streamStatus"),
   toast: document.getElementById("toast"),
@@ -203,6 +201,14 @@ function selectedModelSupportsImage() {
   return Boolean(selectedModel()?.accepts_image);
 }
 
+function hasTypedInput() {
+  return Boolean(elements.messageInput.value.trim());
+}
+
+function shouldShowSendButton() {
+  return !selectedModelSupportsAudio() || hasTypedInput() || Boolean(state.pendingImage) || state.isEditingLastPrompt;
+}
+
 function capabilityTokens(model) {
   if (!model) {
     return ["Text"];
@@ -278,33 +284,49 @@ function syncVoiceUi() {
   const model = selectedModel();
   const supportsAudio = Boolean(model?.accepts_audio);
   const supportsImage = Boolean(model?.accepts_image);
+  const blocked = state.isStreaming || state.isPreparingAudio;
+  const showSend = shouldShowSendButton();
+  const keepRecordVisible = state.isRecording || state.isPreparingAudio;
+  const showRecord = supportsAudio && (keepRecordVisible || !showSend);
+  const showVoiceReplyToggle = supportsAudio && !hasTypedInput() && !state.isEditingLastPrompt;
 
   if (!supportsAudio) {
     state.voiceReplyEnabled = false;
   }
 
   elements.modelCapabilityBadge.textContent = capabilityTokens(model).join(" + ");
-  elements.voiceReplyButton.disabled = !supportsAudio || state.isStreaming || state.isPreparingAudio;
-  elements.recordButton.disabled = !supportsAudio || state.isStreaming || state.isPreparingAudio;
-  elements.attachImageButton.disabled = !supportsImage || state.isStreaming || state.isPreparingAudio;
+  elements.voiceReplyButton.disabled = blocked || !showVoiceReplyToggle;
+  elements.recordButton.disabled = blocked || !showRecord;
+  elements.attachImageButton.disabled = !supportsImage || blocked;
   elements.voiceReplyButton.classList.toggle("active", state.voiceReplyEnabled);
-  elements.voiceReplyButton.textContent = state.voiceReplyEnabled ? "Voice reply on" : "Voice reply off";
+  elements.recordButton.classList.toggle("hidden", !showRecord);
+  elements.voiceReplyButton.classList.toggle("hidden", !showVoiceReplyToggle);
+  elements.sendButton.classList.toggle("hidden", !showSend || keepRecordVisible);
+  elements.sendButton.disabled = state.isStreaming;
+
+  // Toggle recording style on record button
+  elements.recordButton.classList.toggle("recording", state.isRecording);
+
+  // Voice reply label
+  if (elements.voiceReplyLabel) {
+    elements.voiceReplyLabel.textContent = state.voiceReplyEnabled ? "Voice on" : "Voice off";
+  }
 
   if (state.isRecording) {
-    elements.recordButton.textContent = "Send voice";
+    elements.recordButton.setAttribute("aria-label", "Stop recording and send");
     elements.audioStatus.textContent = "Recording... click again to send.";
     syncPromptActionUi();
     return;
   }
 
   if (state.isPreparingAudio) {
-    elements.recordButton.textContent = "Preparing...";
+    elements.recordButton.setAttribute("aria-label", "Processing audio...");
     elements.audioStatus.textContent = "Processing the recording...";
     syncPromptActionUi();
     return;
   }
 
-  elements.recordButton.textContent = "Start voice";
+  elements.recordButton.setAttribute("aria-label", "Record voice message");
 
   if (!supportsAudio) {
     elements.audioStatus.textContent = supportsImage
@@ -334,30 +356,27 @@ function syncPromptActionUi() {
   const hasLastUser = Boolean(lastUserMessage());
   const blocked = state.isStreaming || state.isPreparingAudio;
 
-  if (elements.regenerateButton) {
-    elements.regenerateButton.disabled = blocked || !hasLastUser;
-  }
+  elements.messages
+    .querySelectorAll("[data-message-action='regenerate'], [data-message-action='edit-last-prompt'], [data-message-action='delete-last-prompt']")
+    .forEach((button) => {
+      const action = button.getAttribute("data-message-action");
+      const disabledForMissingPrompt = action === "regenerate" || action === "edit-last-prompt" || action === "delete-last-prompt"
+        ? !hasLastUser
+        : false;
+      button.disabled = blocked || disabledForMissingPrompt;
 
-  if (elements.editLastPromptButton) {
-    elements.editLastPromptButton.disabled = blocked || !hasLastUser;
-    elements.editLastPromptButton.classList.toggle("active", state.isEditingLastPrompt);
-    elements.editLastPromptButton.textContent = state.isEditingLastPrompt
-      ? "Cancel edit"
-      : "Edit last prompt";
-  }
-
-  if (elements.deleteLastPromptButton) {
-    elements.deleteLastPromptButton.disabled = blocked || !hasLastUser;
-  }
-
-  if (!state.isStreaming) {
-    elements.sendButton.textContent = state.isEditingLastPrompt ? "Save + send" : "Send";
-  }
+      if (action === "edit-last-prompt") {
+        button.classList.toggle("active", state.isEditingLastPrompt);
+        button.setAttribute("aria-label", state.isEditingLastPrompt ? "Cancel edit last prompt" : "Edit last prompt");
+        button.setAttribute("title", state.isEditingLastPrompt ? "Cancel edit" : "Edit last prompt");
+      }
+    });
 }
 
 function setEditingLastPrompt(enabled) {
   state.isEditingLastPrompt = Boolean(enabled);
   syncPromptActionUi();
+  syncVoiceUi();
 }
 
 async function regenerateLastPromptForChat(chatId, { manageStreaming = true } = {}) {
@@ -418,6 +437,7 @@ function loadLastPromptIntoComposer() {
   }
 
   autoResizeTextarea();
+  syncVoiceUi();
   elements.messageInput.focus();
   setEditingLastPrompt(true);
 }
@@ -470,11 +490,6 @@ async function deleteLastPrompt() {
     return;
   }
 
-  const shouldDelete = window.confirm("Delete your last prompt and its response?");
-  if (!shouldDelete) {
-    return;
-  }
-
   setStreaming(true);
   elements.streamStatus.textContent = "Deleting...";
 
@@ -500,12 +515,10 @@ async function deleteLastPrompt() {
 
 function setStreaming(isStreaming) {
   state.isStreaming = isStreaming;
-  elements.sendButton.disabled = isStreaming;
   elements.newChatButton.disabled = isStreaming;
   elements.deleteChatButton.disabled = isStreaming || !state.activeChatId;
   enforceModelSelectEnabled();
   elements.streamStatus.textContent = isStreaming ? "Working..." : "Ready";
-  elements.sendButton.textContent = isStreaming ? "Working" : "Send";
   syncVoiceUi();
   syncPromptActionUi();
 }
@@ -534,6 +547,48 @@ function audioSource(format, base64) {
     return "";
   }
   return `data:audio/${format};base64,${base64}`;
+}
+
+function iconMarkup(name) {
+  if (name === "regenerate") {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>';
+  }
+
+  if (name === "edit") {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>';
+  }
+
+  if (name === "delete") {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>';
+  }
+
+  return "";
+}
+
+function latestMessageIdByRole(role) {
+  for (let index = state.activeMessages.length - 1; index >= 0; index -= 1) {
+    const message = state.activeMessages[index];
+    if (message.role === role) {
+      return message.id;
+    }
+  }
+  return null;
+}
+
+function createMessageActionButton({ action, icon, label, tone = "neutral", isActive = false }) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = `message-icon-button ${tone}`;
+  button.setAttribute("data-message-action", action);
+  button.setAttribute("aria-label", label);
+  button.setAttribute("title", label);
+  button.innerHTML = iconMarkup(icon);
+
+  if (isActive) {
+    button.classList.add("active");
+  }
+
+  return button;
 }
 
 function createMessageElement(message, isStreaming = false) {
@@ -596,6 +651,45 @@ function createMessageElement(message, isStreaming = false) {
   meta.textContent = parts.join(" • ");
 
   stack.append(bubble, meta);
+
+  const latestUserId = latestMessageIdByRole("user");
+  const latestAssistantId = latestMessageIdByRole("assistant");
+
+  if (message.role === "assistant" && message.id === latestAssistantId) {
+    const regenRow = document.createElement("div");
+    regenRow.className = "message-actions assistant-actions";
+    regenRow.appendChild(
+      createMessageActionButton({
+        action: "regenerate",
+        icon: "regenerate",
+        label: "Regenerate response",
+      })
+    );
+    stack.appendChild(regenRow);
+  }
+
+  if (message.role === "user" && message.id === latestUserId) {
+    const userActions = document.createElement("div");
+    userActions.className = "message-actions user-actions";
+    userActions.appendChild(
+      createMessageActionButton({
+        action: "edit-last-prompt",
+        icon: "edit",
+        label: state.isEditingLastPrompt ? "Cancel edit" : "Edit last prompt",
+        isActive: state.isEditingLastPrompt,
+      })
+    );
+    userActions.appendChild(
+      createMessageActionButton({
+        action: "delete-last-prompt",
+        icon: "delete",
+        label: "Delete last prompt",
+        tone: "danger",
+      })
+    );
+    stack.appendChild(userActions);
+  }
+
   article.append(avatar, stack);
   return article;
 }
@@ -623,6 +717,7 @@ function renderEmptyState() {
     button.addEventListener("click", () => {
       elements.messageInput.value = button.dataset.prompt || "";
       autoResizeTextarea();
+      syncVoiceUi();
       elements.messageInput.focus();
     });
   });
@@ -640,6 +735,7 @@ function renderMessages() {
   state.activeMessages.forEach((message) => {
     elements.messages.appendChild(createMessageElement(message));
   });
+  syncPromptActionUi();
   elements.messages.scrollTop = elements.messages.scrollHeight;
 }
 
@@ -649,6 +745,7 @@ function appendMessageToView(message, isStreaming = false) {
   }
 
   elements.messages.appendChild(createMessageElement(message, isStreaming));
+  syncPromptActionUi();
   elements.messages.scrollTop = elements.messages.scrollHeight;
 }
 
@@ -660,6 +757,7 @@ function replaceMessageInView(messageId, message) {
   }
 
   previous.replaceWith(createMessageElement(message));
+  syncPromptActionUi();
   elements.messages.scrollTop = elements.messages.scrollHeight;
 }
 
@@ -731,6 +829,7 @@ function clearPendingImage() {
   elements.imageInput.value = "";
   elements.attachmentPreview.innerHTML = "";
   elements.attachmentPreview.classList.add("hidden");
+  syncVoiceUi();
 }
 
 function renderPendingImage() {
@@ -754,6 +853,8 @@ function renderPendingImage() {
   if (removeButton) {
     removeButton.addEventListener("click", clearPendingImage);
   }
+
+  syncVoiceUi();
 }
 
 function openSidebar() {
@@ -836,11 +937,6 @@ async function createNewChat() {
 
 async function deleteActiveChat() {
   if (!state.activeChatId) {
-    return;
-  }
-
-  const shouldDelete = window.confirm("Delete this chat permanently?");
-  if (!shouldDelete) {
     return;
   }
 
@@ -1487,6 +1583,7 @@ function bindEvents() {
   });
 
   elements.messageInput.addEventListener("input", autoResizeTextarea);
+  elements.messageInput.addEventListener("input", syncVoiceUi);
 
   elements.messageInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
@@ -1517,41 +1614,47 @@ function bindEvents() {
     syncVoiceUi();
   });
 
-  elements.regenerateButton.addEventListener("click", () => {
-    if (state.isStreaming || state.isPreparingAudio || !state.activeChatId) {
+  elements.messages.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-message-action]");
+    if (!button) {
       return;
     }
 
-    setEditingLastPrompt(false);
-    regenerateLastPromptForChat(state.activeChatId).catch((error) => {
-      showToast(error instanceof Error ? error.message : "Regenerate failed");
-    });
-  });
-
-  elements.editLastPromptButton.addEventListener("click", () => {
+    const action = button.getAttribute("data-message-action");
     if (state.isStreaming || state.isPreparingAudio) {
       return;
     }
 
-    if (state.isEditingLastPrompt) {
+    if (action === "regenerate") {
+      if (!state.activeChatId) {
+        return;
+      }
       setEditingLastPrompt(false);
-      clearPendingImage();
-      elements.messageInput.value = "";
-      autoResizeTextarea();
+      regenerateLastPromptForChat(state.activeChatId).catch((error) => {
+        showToast(error instanceof Error ? error.message : "Regenerate failed");
+      });
       return;
     }
 
-    loadLastPromptIntoComposer();
-  });
+    if (action === "edit-last-prompt") {
+      if (state.isEditingLastPrompt) {
+        setEditingLastPrompt(false);
+        clearPendingImage();
+        elements.messageInput.value = "";
+        autoResizeTextarea();
+        syncVoiceUi();
+        return;
+      }
 
-  elements.deleteLastPromptButton.addEventListener("click", () => {
-    if (state.isStreaming || state.isPreparingAudio) {
+      loadLastPromptIntoComposer();
       return;
     }
 
-    deleteLastPrompt().catch((error) => {
-      showToast(error instanceof Error ? error.message : "Delete last prompt failed");
-    });
+    if (action === "delete-last-prompt") {
+      deleteLastPrompt().catch((error) => {
+        showToast(error instanceof Error ? error.message : "Delete last prompt failed");
+      });
+    }
   });
 
   elements.sidebarOpenButton.addEventListener("click", openSidebar);
