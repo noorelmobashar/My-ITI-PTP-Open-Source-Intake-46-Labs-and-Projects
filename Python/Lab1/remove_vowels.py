@@ -1,0 +1,1 @@
+print(*filter(lambda x: x.lower() not in "aeiou", input()), sep="")
