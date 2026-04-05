@@ -12,6 +12,7 @@ while True:
 placements = ['_'] * len(word)
 turns = 7
 correct_guesses = 0
+guessed_characters = []
 
 while turns and correct_guesses != len(word):
 
@@ -24,13 +25,19 @@ while turns and correct_guesses != len(word):
 
         print("Invalid Input...")
         continue
-
+    
+    if char in guessed_characters:
+        print("You already guessd this character")
+        continue
+    
     if char in word:
 
-        ind = word.index(char)
-        placements[ind] = char
-        word[ind] = '_'
-        correct_guesses += 1
+        while char in word:
+            ind = word.index(char)
+            placements[ind] = char
+            word[ind] = '_'
+            correct_guesses += 1
+
         print("\nYour Guess is Correct!")
 
         if correct_guesses == len(word):
@@ -46,4 +53,4 @@ while turns and correct_guesses != len(word):
 
 
 
-    
+    guessed_characters.append(char)
