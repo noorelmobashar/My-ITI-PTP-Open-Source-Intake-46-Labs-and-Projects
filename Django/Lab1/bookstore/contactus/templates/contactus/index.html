@@ -1,0 +1,178 @@
+{% extends 'layouts/navbar_main_footer.html' %}
+
+{% block title %}Contact Us | BookHaven{% endblock %}
+
+{% block extra_head %}
+<style>
+	.contact-grid {
+		display: grid;
+		grid-template-columns: 1fr 1.1fr;
+		gap: 20px;
+	}
+
+	.panel {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow);
+	}
+
+	.info {
+		padding: 22px;
+	}
+
+	.info h1 {
+		margin: 0 0 8px;
+		font-family: 'Playfair Display', serif;
+		font-size: clamp(1.65rem, 1.2rem + 1.2vw, 2.25rem);
+	}
+
+	.info > p {
+		margin: 0 0 16px;
+		color: var(--muted);
+		line-height: 1.6;
+	}
+
+	.contact-list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: 10px;
+	}
+
+	.contact-list li {
+		padding: 11px 12px;
+		border-radius: var(--radius-sm);
+		border: 1px solid rgba(216, 207, 191, 0.9);
+		background: #fbf7ef;
+	}
+
+	.contact-list strong {
+		display: block;
+		font-size: 0.84rem;
+		color: var(--muted);
+		font-weight: 500;
+		margin-bottom: 2px;
+	}
+
+	.form-wrap {
+		padding: 22px;
+	}
+
+	.form-wrap h2 {
+		margin: 0 0 14px;
+		font-size: 1.2rem;
+	}
+
+	.form-grid {
+		display: grid;
+		gap: 12px;
+	}
+
+	.field {
+		display: grid;
+		gap: 6px;
+	}
+
+	label {
+		font-size: 0.9rem;
+		color: var(--muted);
+	}
+
+	input,
+	textarea {
+		width: 100%;
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		background: #fff;
+		padding: 10px 12px;
+		font: inherit;
+	}
+
+	input:focus,
+	textarea:focus {
+		outline: 2px solid rgba(14, 122, 106, 0.28);
+		border-color: var(--primary);
+	}
+
+	textarea {
+		resize: vertical;
+		min-height: 130px;
+	}
+
+	.send-btn {
+		justify-self: flex-start;
+		padding: 10px 16px;
+		border-radius: 999px;
+		border: 0;
+		background: var(--primary);
+		color: #fff;
+		font-weight: 600;
+		cursor: pointer;
+		transition: 0.2s ease;
+	}
+
+	.send-btn:hover {
+		background: var(--primary-dark);
+		transform: translateY(-1px);
+	}
+
+	@media (max-width: 920px) {
+		.contact-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="contact-grid">
+	<article class="panel info">
+		<h1>Let us hear from you</h1>
+		<p>Questions, suggestions, or partnerships, we are happy to connect. Our team replies quickly and keeps every conversation meaningful.</p>
+
+		<ul class="contact-list">
+			<li>
+				<strong>Email</strong>
+				hello@bookhaven.example
+			</li>
+			<li>
+				<strong>Phone</strong>
+				+20 100 000 0000
+			</li>
+			<li>
+				<strong>Address</strong>
+				Knowledge Hub, Smart Village, Giza
+			</li>
+			<li>
+				<strong>Working Hours</strong>
+				Sunday - Thursday, 9:00 AM to 5:00 PM
+			</li>
+		</ul>
+	</article>
+
+	<article class="panel form-wrap">
+		<h2>Quick Message</h2>
+		<form class="form-grid" action="#" method="post">
+			{% csrf_token %}
+			<div class="field">
+				<label for="full-name">Full Name</label>
+				<input id="full-name" type="text" name="full_name" placeholder="Enter your full name">
+			</div>
+
+			<div class="field">
+				<label for="email">Email</label>
+				<input id="email" type="email" name="email" placeholder="you@example.com">
+			</div>
+
+			<div class="field">
+				<label for="message">Message</label>
+				<textarea id="message" name="message" placeholder="Tell us what you need..."></textarea>
+			</div>
+
+			<button type="submit" class="send-btn">Send Message</button>
+		</form>
+	</article>
+</section>
+{% endblock %}

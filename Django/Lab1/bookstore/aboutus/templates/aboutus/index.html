@@ -1,0 +1,137 @@
+{% extends 'layouts/navbar_main_footer.html' %}
+
+{% block title %}About Us | BookHaven{% endblock %}
+
+{% block extra_head %}
+<style>
+	.about-hero {
+		display: grid;
+		grid-template-columns: 1.1fr 1fr;
+		gap: 24px;
+		margin-bottom: 20px;
+	}
+
+	.about-card {
+		padding: 28px;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		background: var(--surface);
+		box-shadow: var(--shadow);
+	}
+
+	.about-card h1,
+	.pillars h2 {
+		margin: 0 0 12px;
+		font-family: 'Playfair Display', serif;
+		font-size: clamp(1.7rem, 1.15rem + 1.4vw, 2.3rem);
+	}
+
+	.about-card p {
+		margin: 0;
+		color: var(--muted);
+		line-height: 1.7;
+	}
+
+	.art {
+		border-radius: var(--radius-lg);
+		border: 1px solid var(--border);
+		background:
+			radial-gradient(circle at 20% 20%, rgba(14, 122, 106, 0.35), transparent 34%),
+			radial-gradient(circle at 78% 78%, rgba(222, 143, 50, 0.4), transparent 36%),
+			linear-gradient(160deg, #f0e5d2, #fbf7ef);
+		min-height: 290px;
+		position: relative;
+		overflow: hidden;
+		box-shadow: var(--shadow);
+	}
+
+	.art::before,
+	.art::after {
+		content: '';
+		position: absolute;
+		border-radius: 50%;
+		border: 1px solid rgba(255, 255, 255, 0.6);
+	}
+
+	.art::before {
+		width: 220px;
+		height: 220px;
+		top: -40px;
+		right: -10px;
+	}
+
+	.art::after {
+		width: 180px;
+		height: 180px;
+		bottom: -30px;
+		left: -20px;
+	}
+
+	.pillars {
+		padding: 20px;
+	}
+
+	.pillar-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 14px;
+	}
+
+	.pillar {
+		background: #fffdf8;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		padding: 16px;
+	}
+
+	.pillar h3 {
+		margin: 0 0 8px;
+		font-size: 1.05rem;
+	}
+
+	.pillar p {
+		margin: 0;
+		color: var(--muted);
+		line-height: 1.5;
+	}
+
+	@media (max-width: 900px) {
+		.about-hero {
+			grid-template-columns: 1fr;
+		}
+
+		.art {
+			min-height: 220px;
+		}
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="about-hero">
+	<article class="about-card">
+		<h1>We Build Reading Experiences, Not Just Pages</h1>
+		<p>BookHaven was created to make discovering books elegant and effortless. Our mission is to connect curious readers with meaningful titles through clear structure, modern design, and simple navigation that keeps stories at the center.</p>
+	</article>
+
+	<div class="art" aria-hidden="true"></div>
+</section>
+
+<section class="card pillars">
+	<h2>What We Believe</h2>
+	<div class="pillar-grid">
+		<article class="pillar">
+			<h3>Thoughtful Curation</h3>
+			<p>Every listed book is presented with concise metadata so readers can decide quickly and confidently.</p>
+		</article>
+		<article class="pillar">
+			<h3>Author-Centric Discovery</h3>
+			<p>We make it easy to jump between authors and their works, helping readers explore complete creative worlds.</p>
+		</article>
+		<article class="pillar">
+			<h3>Design with Purpose</h3>
+			<p>Modern visuals are used to improve clarity and comfort, never to distract from content.</p>
+		</article>
+	</div>
+</section>
+{% endblock %}

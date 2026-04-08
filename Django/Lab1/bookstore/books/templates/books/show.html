@@ -1,0 +1,138 @@
+{% extends 'layouts/navbar_main_footer.html' %}
+
+{% block title %}Book Details | BookHaven{% endblock %}
+
+{% block extra_head %}
+
+{% load static %}
+
+<style>
+	.book-details {
+		display: grid;
+		grid-template-columns: 1.1fr 1fr;
+		gap: 22px;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow);
+		overflow: hidden;
+	}
+
+	.visual {
+		min-height: 360px;
+		background: var(--surface-alt);
+	}
+
+	.visual img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	.content {
+		padding: 24px 24px 26px 0;
+	}
+
+	.tag {
+		display: inline-flex;
+		padding: 5px 10px;
+		border-radius: 999px;
+		background: rgba(14, 122, 106, 0.12);
+		color: var(--primary-dark);
+		font-size: 0.84rem;
+		font-weight: 600;
+		margin-bottom: 12px;
+	}
+
+	.title {
+		margin: 0 0 10px;
+		font-family: 'Playfair Display', serif;
+		font-size: clamp(1.7rem, 1.1rem + 1.6vw, 2.5rem);
+		line-height: 1.12;
+	}
+
+	.brief {
+		margin: 0 0 16px;
+		color: var(--muted);
+		line-height: 1.6;
+	}
+
+	.facts {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: 10px;
+	}
+
+	.facts li {
+		padding: 10px 12px;
+		border-radius: var(--radius-sm);
+		background: #faf6ee;
+		border: 1px solid rgba(216, 207, 191, 0.85);
+		display: flex;
+		justify-content: space-between;
+		gap: 10px;
+		font-size: 0.96rem;
+	}
+
+	.facts strong {
+		color: var(--muted);
+		font-weight: 500;
+	}
+
+	.price {
+		color: var(--primary-dark);
+		font-weight: 700;
+	}
+
+	.back-link {
+		margin-top: 20px;
+		display: inline-block;
+		color: var(--primary-dark);
+		font-weight: 600;
+	}
+
+	.back-link:hover {
+		text-decoration: underline;
+	}
+
+	@media (max-width: 860px) {
+		.book-details {
+			grid-template-columns: 1fr;
+		}
+
+		.content {
+			padding: 0 18px 20px;
+		}
+
+		.visual {
+			min-height: 270px;
+		}
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="book-details">
+	<div class="visual">
+		<img src="{% static book.image %}" alt="{{ book.title }}">
+	</div>
+
+	<div class="content">
+		<span class="tag">Single Book View</span>
+		<h1 class="title">{{ book.title }}</h1>
+		<p class="brief">{{ book.brief|default:'No brief available for this title yet.' }}</p>
+
+		<ul class="facts">
+			<li><strong>ID</strong><span>{{ book.id }}</span></li>
+			<li><strong>Title</strong><span>{{ book.title }}</span></li>
+			<li><strong>No. of Pages</strong><span>{{ book.no_of_page|default:'-' }}</span></li>
+			<li><strong>Price</strong><span class="price">${{ book.price|default:'0.00' }}</span></li>
+		</ul>
+
+		<a href="{% url 'books.index' %}" class="back-link">Back to all books</a>
+	</div>
+</section>
+{% endblock %}

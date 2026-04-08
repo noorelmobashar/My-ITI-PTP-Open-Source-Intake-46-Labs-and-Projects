@@ -8,6 +8,15 @@
             "mobile_phone": "01551825532",
             "id": 1,
             "is_email_verified": false
+        },
+        {
+            "f_name": "ahmed",
+            "l_name": "mohamed",
+            "email": "1@gmail.com",
+            "password": "12345678a",
+            "mobile_phone": "01551825532",
+            "id": 2,
+            "is_email_verified": false
         }
     ],
     "projects": [

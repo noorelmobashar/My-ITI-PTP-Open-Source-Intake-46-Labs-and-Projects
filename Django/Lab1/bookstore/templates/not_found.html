@@ -1,0 +1,109 @@
+{% extends 'layouts/navbar_main_footer.html' %}
+
+{% block title %}Page Not Found | BookHaven{% endblock %}
+
+{% block extra_head %}
+<style>
+	.nf-wrap {
+		min-height: 62vh;
+		display: grid;
+		place-items: center;
+	}
+
+	.nf-card {
+		width: min(840px, 100%);
+		padding: clamp(22px, 4vw, 42px);
+		border-radius: var(--radius-lg);
+		border: 1px solid var(--border);
+		background:
+			radial-gradient(circle at 10% 18%, rgba(222, 143, 50, 0.2), transparent 40%),
+			radial-gradient(circle at 90% 88%, rgba(14, 122, 106, 0.2), transparent 40%),
+			var(--surface);
+		box-shadow: var(--shadow);
+		text-align: center;
+	}
+
+	.status {
+		margin: 0;
+		font-size: clamp(3.3rem, 2.7rem + 2.5vw, 5.2rem);
+		line-height: 1;
+		font-family: 'Playfair Display', serif;
+		color: var(--primary-dark);
+		letter-spacing: 1px;
+	}
+
+	.headline {
+		margin: 12px 0 10px;
+		font-family: 'Playfair Display', serif;
+		font-size: clamp(1.5rem, 1.2rem + 1.1vw, 2.1rem);
+	}
+
+	.copy {
+		margin: 0 auto 20px;
+		max-width: 600px;
+		color: var(--muted);
+		line-height: 1.6;
+	}
+
+	.actions {
+		display: flex;
+		gap: 10px;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 10px 16px;
+		border-radius: 999px;
+		font-weight: 600;
+		transition: 0.2s ease;
+	}
+
+	.btn-primary {
+		background: var(--primary);
+		color: #fff;
+		border: 1px solid var(--primary);
+	}
+
+	.btn-primary:hover {
+		background: var(--primary-dark);
+		border-color: var(--primary-dark);
+	}
+
+	.btn-ghost {
+		background: transparent;
+		color: var(--primary-dark);
+		border: 1px solid rgba(14, 122, 106, 0.34);
+	}
+
+	.btn-ghost:hover {
+		background: rgba(14, 122, 106, 0.09);
+	}
+
+	.hint {
+		margin: 18px 0 0;
+		color: var(--muted);
+		font-size: 0.92rem;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="nf-wrap">
+	<article class="nf-card">
+		<p class="status">404</p>
+		<h1 class="headline">This page cannot be found</h1>
+		<p class="copy">The link may be outdated or the page may have moved. You can continue browsing from the main catalog or return to the homepage.</p>
+
+		<div class="actions">
+			<a href="/books/" class="btn btn-primary">Go To Books</a>
+			<a href="/" class="btn btn-ghost">Back To Home</a>
+		</div>
+
+		<p class="hint">If you typed the URL manually, check the spelling and try again.</p>
+	</article>
+</section>
+{% endblock %}

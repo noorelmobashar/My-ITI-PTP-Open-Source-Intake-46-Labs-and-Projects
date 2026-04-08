@@ -1,0 +1,168 @@
+{% extends 'layouts/navbar_main_footer.html' %}
+
+{% block title %}Books | BookHaven{% endblock %}
+
+{% block extra_head %}
+
+{% load static %}
+
+<style>
+	.hero {
+		margin-bottom: 24px;
+		padding: 26px;
+		border-radius: var(--radius-lg);
+		border: 1px solid var(--border);
+		background:
+			radial-gradient(circle at 80% 14%, rgba(14, 122, 106, 0.18), transparent 40%),
+			radial-gradient(circle at 10% 92%, rgba(222, 143, 50, 0.2), transparent 44%),
+			var(--surface);
+		box-shadow: var(--shadow);
+	}
+
+	.hero h1 {
+		margin: 0 0 10px;
+		font-family: 'Playfair Display', serif;
+		font-size: clamp(1.7rem, 1.4rem + 1.1vw, 2.4rem);
+	}
+
+	.hero p {
+		margin: 0;
+		color: var(--muted);
+		max-width: 760px;
+	}
+
+	.books-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+		gap: 18px;
+	}
+
+	.book-card {
+		background: var(--surface);
+		border-radius: var(--radius-md);
+		border: 1px solid var(--border);
+		box-shadow: var(--shadow);
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		transition: transform 0.22s ease, box-shadow 0.22s ease;
+	}
+
+	.book-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 20px 36px rgba(21, 29, 39, 0.16);
+	}
+
+	.book-image {
+		aspect-ratio: 16 / 10;
+		width: 100%;
+		object-fit: cover;
+		background: linear-gradient(135deg, #dcd6ca, #f4eddf);
+	}
+
+	.book-body {
+		padding: 14px 14px 16px;
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+	}
+
+	.book-title {
+		margin: 0 0 8px;
+		font-weight: 700;
+		font-size: 1.12rem;
+	}
+
+	.book-brief {
+		margin: 0 0 12px;
+		color: var(--muted);
+		line-height: 1.48;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 3;
+		line-clamp: 3;
+		max-height: 4.44em;
+	}
+
+	.book-meta {
+		margin: auto 0 0;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+	}
+
+	.book-price {
+		color: var(--primary-dark);
+		font-size: 1.15rem;
+		font-weight: 700;
+	}
+
+	.show-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 8px 12px;
+		border-radius: 999px;
+		border: 1px solid rgba(14, 122, 106, 0.32);
+		color: var(--primary-dark);
+		font-weight: 600;
+		transition: 0.2s ease;
+	}
+
+	.show-btn:hover {
+		color: #ffffff;
+		background: var(--primary);
+		border-color: var(--primary);
+	}
+
+	.empty-state {
+		text-align: center;
+		padding: 46px 22px;
+		border-radius: var(--radius-lg);
+		border: 1px dashed var(--border);
+		background: rgba(255, 253, 248, 0.6);
+	}
+
+	.empty-state h3 {
+		margin: 0 0 8px;
+		font-family: 'Playfair Display', serif;
+	}
+
+	.empty-state p {
+		margin: 0;
+		color: var(--muted);
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+	<h1>Explore Beautifully Curated Books</h1>
+	<p>Discover your next favorite read from our modern collection. Every card leads to a dedicated details page where readers can inspect key facts quickly.</p>
+</section>
+
+{% if books %}
+<section class="books-grid">
+	{% for book in books %}
+	<article class="book-card">
+		<img src="{% static book.image %}" alt="{{ book.title }}" class="book-image">
+		<div class="book-body">
+			<h2 class="book-title">{{ book.title }}</h2>
+			<p class="book-brief">{{ book.brief|default:'No brief provided yet.'|truncatechars:90 }}</p>
+			<p class="book-meta">
+				<span class="book-price">${{ book.price|default:'0.00' }}</span>
+				<a href="{% url 'books.show' book.id %}" class="show-btn">Show</a>
+			</p>
+		</div>
+	</article>
+	{% endfor %}
+</section>
+{% else %}
+<section class="empty-state">
+	<h3>No books are available yet</h3>
+	<p>Once books are added, they will appear here in this grid.</p>
+</section>
+{% endif %}
+{% endblock %}
