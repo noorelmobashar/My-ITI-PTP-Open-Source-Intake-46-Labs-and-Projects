@@ -4,8 +4,6 @@
 
 {% block extra_head %}
 
-{% load static %}
-
 <style>
 	.hero {
 		margin-bottom: 24px;
@@ -29,6 +27,37 @@
 		margin: 0;
 		color: var(--muted);
 		max-width: 760px;
+	}
+
+	.hero-top {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 12px;
+	}
+
+	.hero-copy {
+		display: grid;
+		gap: 0;
+	}
+
+	.add-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 10px 15px;
+		border-radius: 999px;
+		background: var(--primary);
+		color: #fff;
+		font-weight: 600;
+		white-space: nowrap;
+		border: 1px solid var(--primary);
+		transition: 0.2s ease;
+	}
+
+	.add-btn:hover {
+		background: var(--primary-dark);
+		border-color: var(--primary-dark);
 	}
 
 	.books-grid {
@@ -93,6 +122,14 @@
 		gap: 8px;
 	}
 
+	.book-time {
+		margin: 0 0 10px;
+		display: grid;
+		gap: 4px;
+		color: var(--muted);
+		font-size: 0.82rem;
+	}
+
 	.book-price {
 		color: var(--primary-dark);
 		font-size: 1.15rem;
@@ -134,23 +171,39 @@
 		margin: 0;
 		color: var(--muted);
 	}
+
+	@media (max-width: 700px) {
+		.hero-top {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+	}
 </style>
 {% endblock %}
 
 {% block content %}
 <section class="hero">
-	<h1>Explore Beautifully Curated Books</h1>
-	<p>Discover your next favorite read from our modern collection. Every card leads to a dedicated details page where readers can inspect key facts quickly.</p>
+	<div class="hero-top">
+		<div class="hero-copy">
+			<h1>Explore Beautifully Curated Books</h1>
+			<p>Discover your next favorite read from our modern collection. Every card leads to a dedicated details page where readers can inspect key facts quickly.</p>
+		</div>
+		<a href="{% url 'books.create' %}" class="add-btn">Add Book</a>
+	</div>
 </section>
 
 {% if books %}
 <section class="books-grid">
 	{% for book in books %}
 	<article class="book-card">
-		<img src="{% static book.image %}" alt="{{ book.title }}" class="book-image">
+		<img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-image">
 		<div class="book-body">
 			<h2 class="book-title">{{ book.title }}</h2>
 			<p class="book-brief">{{ book.brief|default:'No brief provided yet.'|truncatechars:90 }}</p>
+			<div class="book-time">
+				<span>Created: {{ book.created_at|date:'Y-m-d H:i' }}</span>
+				<span>Updated: {{ book.updated_at|date:'Y-m-d H:i' }}</span>
+			</div>
 			<p class="book-meta">
 				<span class="book-price">${{ book.price|default:'0.00' }}</span>
 				<a href="{% url 'books.show' book.id %}" class="show-btn">Show</a>

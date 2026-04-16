@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RAG Chat — Local AI Assistant</title>
+    <meta name="description"
+        content="A local RAG-powered chat application using Llama 3.2 and FAISS for intelligent document-grounded conversations." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe',
+                            300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1',
+                            600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81',
+                        },
+                        surface: {
+                            50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0',
+                            700: '#1e293b', 800: '#0f172a', 900: '#020617',
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        /* ── Global ────────────────────────────────────────────────── */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #4338ca transparent;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        /* ── Animations ────────────────────────────────────────────── */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes pulseGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 8px rgba(99, 102, 241, .25)
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(99, 102, 241, .45)
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0
+            }
+
+            100% {
+                background-position: 200% 0
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-4px)
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-16px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0)
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(.92)
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1)
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp .4s ease-out both;
+        }
+
+        .animate-pulse-glow {
+            animation: pulseGlow 2.5s ease-in-out infinite;
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-slide-in {
+            animation: slideIn .35s ease-out both;
+        }
+
+        .animate-scale-in {
+            animation: scaleIn .25s ease-out both;
+        }
+
+        /* ── Glass card ────────────────────────────────────────────── */
+        .glass {
+            background: rgba(255, 255, 255, .04);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        /* ── Chat bubbles ──────────────────────────────────────────── */
+        .msg-user {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            border-radius: 20px 20px 6px 20px;
+        }
+
+        .msg-bot {
+            background: rgba(255, 255, 255, .06);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 20px 20px 20px 6px;
+        }
+
+        /* ── Typing indicator ──────────────────────────────────────── */
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #818cf8;
+            display: inline-block;
+            animation: float 1.4s ease-in-out infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: .2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: .4s;
+        }
+
+        /* ── Scrollbar ─────────────────────────────────────────────── */
+        #chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #chat-messages::-webkit-scrollbar-thumb {
+            background: #4338ca;
+            border-radius: 99px;
+        }
+
+        /* ── File chip hover ───────────────────────────────────────── */
+        .file-chip {
+            transition: all .2s ease;
+        }
+
+        .file-chip:hover {
+            background: rgba(99, 102, 241, .1);
+        }
+
+        .file-chip .delete-btn {
+            opacity: 0;
+            transition: opacity .2s ease;
+        }
+
+        .file-chip:hover .delete-btn {
+            opacity: 1;
+        }
+
+        /* ── Drop zone ─────────────────────────────────────────────── */
+        .drop-zone {
+            border: 2px dashed rgba(99, 102, 241, .25);
+            transition: all .3s ease;
+        }
+
+        .drop-zone.drag-over {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, .08);
+            transform: scale(1.01);
+        }
+
+        .drop-zone:hover {
+            border-color: rgba(99, 102, 241, .45);
+        }
+
+        /* ── Upload progress ───────────────────────────────────────── */
+        .upload-progress-bar {
+            background: linear-gradient(90deg, #6366f1, #818cf8);
+            transition: width .3s ease;
+        }
+
+        /* ── Textarea reset ────────────────────────────────────────── */
+        textarea {
+            resize: none;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+    </style>
+</head>
+
+<body class="h-full bg-surface-900 text-white overflow-hidden">
+
+    <!-- ═══════════════ LAYOUT ═══════════════ -->
+    <div class="flex h-full">
+
+        <!-- ──────────── SIDEBAR ──────────── -->
+        <aside id="sidebar"
+            class="w-80 flex-shrink-0 border-r border-white/5 flex flex-col bg-surface-800/60 transition-all duration-300">
+
+            <!-- Logo area -->
+            <div class="px-6 py-5 flex items-center gap-3 border-b border-white/5">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-500/20 animate-pulse-glow">
+                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714a2.25 2.25 0 0 0 .659 1.591L19 14.5M14.25 3.104c.251.023.501.05.75.082M19 14.5l-2.47 2.47a2.25 2.25 0 0 1-1.591.659H9.061a2.25 2.25 0 0 1-1.591-.659L5 14.5m14 0H5" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-base font-semibold tracking-tight">RAG Chat</h1>
+                    <p class="text-[11px] text-white/40 font-medium">Llama 3.2 · FAISS · Local</p>
+                </div>
+            </div>
+
+            <!-- Upload drop zone -->
+            <div class="px-4 pt-4">
+                <div id="drop-zone" class="drop-zone rounded-xl p-4 text-center cursor-pointer"
+                    onclick="document.getElementById('file-input').click()">
+                    <input type="file" id="file-input" multiple
+                        accept=".pdf,.txt,.md,.json,.csv,.docx,.doc,.xml,.html,.htm,.log" class="hidden"
+                        onchange="handleFileSelect(event)" />
+                    <div id="upload-icon" class="mx-auto mb-2">
+                        <svg class="w-8 h-8 mx-auto text-brand-400/60" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z" />
+                        </svg>
+                    </div>
+                    <p class="text-xs font-medium text-white/50">Drop files here or <span
+                            class="text-brand-400">browse</span></p>
+                    <p class="text-[10px] text-white/25 mt-1">PDF · Word · TXT · JSON · CSV · MD · HTML · XML</p>
+                </div>
+            </div>
+
+            <!-- Upload progress -->
+            <div id="upload-progress" class="px-4 pt-2 hidden">
+                <div class="bg-white/5 rounded-full h-1.5 overflow-hidden">
+                    <div id="upload-bar" class="upload-progress-bar h-full rounded-full" style="width: 0%"></div>
+                </div>
+                <p id="upload-status-text" class="text-[10px] text-brand-300 mt-1.5 text-center"></p>
+            </div>
+
+            <!-- Status badge -->
+            <div id="ingest-status" class="px-4 pt-2 hidden">
+                <div class="text-xs text-brand-300 bg-brand-500/10 rounded-lg px-3 py-2 animate-slide-in"></div>
+            </div>
+
+            <!-- Import Database button
+            <div class="px-4 pt-3">
+                <button id="btn-import-db" onclick="importDatabase()"
+                    class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold
+                           bg-gradient-to-r from-emerald-600/20 to-teal-600/20 border border-emerald-500/20
+                           text-emerald-300 hover:from-emerald-600/30 hover:to-teal-600/30
+                           hover:border-emerald-500/30 transition-all duration-200 active:scale-[0.98]">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                    </svg>
+                    <span id="btn-import-db-text">Import MariaDB — iti</span>
+                </button>
+            </div> -->
+
+            <!-- Documents list -->
+            <div class="flex-1 overflow-y-auto px-4 pt-4 pb-4">
+                <div class="flex items-center justify-between mb-3 px-1">
+                    <h2 class="text-[11px] font-semibold uppercase tracking-widest text-white/30">Documents</h2>
+                    <span id="doc-count" class="text-[10px] text-white/20 font-medium"></span>
+                </div>
+                <div id="doc-list" class="space-y-1">
+                    <p class="text-xs text-white/25 italic px-1">No documents yet.</p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="px-6 py-4 border-t border-white/5">
+                <div class="flex items-center gap-2">
+                    <span class="relative flex h-2.5 w-2.5">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                    </span>
+                    <span class="text-[11px] text-white/40">Ollama Connected</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ──────────── MAIN CHAT AREA ──────────── -->
+        <main class="flex-1 flex flex-col min-w-0">
+
+            <!-- Header bar -->
+            <header class="flex-shrink-0 px-6 py-4 border-b border-white/5 flex items-center justify-between glass">
+                <div class="flex items-center gap-6">
+                    <div>
+                        <h2 class="text-sm font-semibold text-white/90">Chat with your Documents</h2>
+                        <p class="text-[11px] text-white/35 mt-0.5">Answers grounded in your uploaded knowledge base
+                        </p>
+                    </div>
+                    <div class="h-8 w-px bg-white/10"></div>
+                    <nav class="flex items-center gap-1 bg-white/[0.03] rounded-lg p-1">
+                        <button id="tab-chat" onclick="switchTab('chat')"
+                            class="tab-btn text-xs font-semibold px-4 py-1.5 rounded-md transition-all bg-brand-500/20 text-brand-300 shadow-sm">
+                            💬 Chat
+                        </button>
+                        <button id="tab-embeddings" onclick="switchTab('embeddings')"
+                            class="tab-btn text-xs font-semibold px-4 py-1.5 rounded-md transition-all text-white/40 hover:text-white/60">
+                            🔍 Embeddings
+                        </button>
+                    </nav>
+                </div>
+                <button id="btn-clear" onclick="clearChat()"
+                    class="text-xs text-white/30 hover:text-white/70 transition flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-white/5">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                    </svg>
+                    Clear
+                </button>
+            </header>
+
+            <!-- ═══ VIEW: CHAT ═══ -->
+            <div id="view-chat" class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+            <!-- Chat messages -->
+            <div id="chat-messages" class="flex-1 overflow-y-auto px-6 py-6 space-y-4">
+
+                <!-- Welcome state -->
+                <div id="welcome"
+                    class="flex flex-col items-center justify-center h-full text-center animate-fade-in-up">
+                    <div
+                        class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-500/20 to-brand-700/20 border border-brand-500/20 flex items-center justify-center mb-6 animate-float">
+                        <svg class="w-10 h-10 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white/80 mb-2">Welcome to RAG Chat</h3>
+                    <p class="text-sm text-white/35 max-w-md leading-relaxed">
+                        Drag & drop your files into the sidebar or click <strong class="text-brand-400">browse</strong>
+                        to upload.
+                        Supported formats include PDF, Word, JSON, CSV, Markdown, and more.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Input area -->
+            <div class="flex-shrink-0 px-6 pb-6 pt-2">
+                <form id="chat-form" onsubmit="handleSubmit(event)" class="relative">
+                    <div
+                        class="flex items-end gap-3 glass rounded-2xl px-4 py-3 focus-within:ring-2 focus-within:ring-brand-500/40 transition-all duration-200">
+                        <textarea id="query-input" rows="1" placeholder="Ask a question about your documents…"
+                            class="flex-1 bg-transparent text-sm text-white placeholder-white/25 py-1 min-h-[24px] max-h-[120px] leading-relaxed"
+                            oninput="autoResize(this)"></textarea>
+                        <button id="btn-send" type="submit" class="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400
+                                   flex items-center justify-center shadow-lg shadow-brand-600/20 active:scale-90 transition-all duration-200
+                                   disabled:opacity-30 disabled:cursor-not-allowed disabled:active:scale-100" disabled>
+                            <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="text-[10px] text-white/20 text-center mt-2">RAG Chat can make mistakes. Answers are
+                        grounded in your uploaded documents only.</p>
+                </form>
+            </div>
+            </div> <!-- /view-chat -->
+
+            <!-- ═══ VIEW: EMBEDDINGS EXPLORER ═══ -->
+            <div id="view-embeddings" class="hidden flex-1 flex flex-col min-w-0 overflow-hidden">
+
+                <!-- Toolbar -->
+                <div class="flex items-center justify-between px-6 py-4 border-b border-white/5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/20 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-semibold text-white/80">FAISS Vector Store</h3>
+                            <p class="text-[11px] text-white/35">Browse all chunks stored in the index</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input id="emb-search" type="text" placeholder="Filter chunks…"
+                            class="text-xs bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-white/70 placeholder-white/25 focus:outline-none focus:ring-1 focus:ring-brand-500/40 w-48"
+                            oninput="filterEmbeddings(this.value)" />
+                        <button onclick="loadEmbeddings()"
+                            class="text-xs text-white/40 hover:text-white/80 transition p-2 rounded-lg hover:bg-white/5"
+                            title="Refresh">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                        </button>
+                        <span id="embeddings-count"
+                            class="text-[11px] font-medium text-white/40 bg-white/5 border border-white/10 px-2.5 py-1 rounded-lg"></span>
+                    </div>
+                </div>
+
+                <!-- Chunk cards -->
+                <div id="embeddings-list" class="flex-1 overflow-y-auto px-6 py-5">
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4" id="emb-grid"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ═══════════════ SCRIPTS ═══════════════ -->
+    <script>
+        // ── State ─────────────────────────────────────────────────
+        let isLoading = false;
+        let isUploading = false;
+        let chatHistory = [];
+
+        // ── DOM refs ──────────────────────────────────────────────
+        const chatMessages = document.getElementById('chat-messages');
+        const queryInput = document.getElementById('query-input');
+        const btnSend = document.getElementById('btn-send');
+        const ingestStatus = document.getElementById('ingest-status');
+        const docList = document.getElementById('doc-list');
+        const docCount = document.getElementById('doc-count');
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const uploadProgress = document.getElementById('upload-progress');
+        const uploadBar = document.getElementById('upload-bar');
+        const uploadStatus = document.getElementById('upload-status-text');
+
+        // ── Enable / disable send ─────────────────────────────────
+        queryInput.addEventListener('input', () => {
+            btnSend.disabled = !queryInput.value.trim() || isLoading;
+        });
+
+        queryInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                if (!btnSend.disabled) document.getElementById('chat-form').requestSubmit();
+            }
+        });
+
+        // ── Auto-resize textarea ──────────────────────────────────
+        function autoResize(el) {
+            el.style.height = 'auto';
+            el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+        }
+
+        // ── Format file size ──────────────────────────────────────
+        function formatBytes(b) {
+            if (b < 1024) return b + ' B';
+            if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+            return (b / 1048576).toFixed(1) + ' MB';
+        }
+
+        // ── Icon for file type ────────────────────────────────────
+        function fileIcon(type) {
+            const icons = {
+                pdf: { color: 'text-rose-400', label: 'PDF' },
+                docx: { color: 'text-blue-400', label: 'DOC' },
+                doc: { color: 'text-blue-400', label: 'DOC' },
+                json: { color: 'text-amber-400', label: 'JSON' },
+                csv: { color: 'text-emerald-400', label: 'CSV' },
+                md: { color: 'text-purple-400', label: 'MD' },
+                txt: { color: 'text-slate-400', label: 'TXT' },
+                xml: { color: 'text-orange-400', label: 'XML' },
+                html: { color: 'text-cyan-400', label: 'HTML' },
+                htm: { color: 'text-cyan-400', label: 'HTML' },
+                log: { color: 'text-gray-400', label: 'LOG' },
+            };
+            const cfg = icons[type] || { color: 'text-white/40', label: type?.toUpperCase() || '?' };
+            return `<div class="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                        <span class="text-[9px] font-bold ${cfg.color}">${cfg.label}</span>
+                     </div>`;
+        }
+
+        // ── Render markdown-lite (bold, code, lists) ──────────────
+        function renderMarkdown(text) {
+            return text
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/```([\s\S]*?)```/g, '<pre class="bg-black/30 rounded-lg p-3 mt-2 mb-2 overflow-x-auto text-xs font-mono text-brand-200">$1</pre>')
+                .replace(/`([^`]+)`/g, '<code class="bg-white/10 px-1.5 py-0.5 rounded text-xs font-mono text-brand-300">$1</code>')
+                .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-white/90">$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
+        }
+
+        // ── Add a message bubble ──────────────────────────────────
+        function addMessage(role, content, sources = []) {
+            const welcome = document.getElementById('welcome');
+            if (welcome) welcome.remove();
+
+            const wrapper = document.createElement('div');
+            wrapper.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in-up`;
+
+            const bubble = document.createElement('div');
+            bubble.className = `max-w-[75%] px-5 py-3.5 text-sm leading-relaxed ${role === 'user' ? 'msg-user text-white' : 'msg-bot text-white/80'}`;
+            bubble.innerHTML = renderMarkdown(content);
+
+            // Source tags
+            if (sources.length > 0 && role === 'bot') {
+                const srcDiv = document.createElement('div');
+                srcDiv.className = 'mt-3 pt-2.5 border-t border-white/10 flex flex-wrap gap-1.5';
+                sources.forEach(s => {
+                    const tag = document.createElement('span');
+                    tag.className = 'inline-flex items-center gap-1 text-[10px] font-medium text-brand-300 bg-brand-500/10 px-2 py-0.5 rounded-full';
+                    tag.innerHTML = `<svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/></svg>${s}`;
+                    srcDiv.appendChild(tag);
+                });
+                bubble.appendChild(srcDiv);
+            }
+
+            wrapper.appendChild(bubble);
+            chatMessages.appendChild(wrapper);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // ── Typing indicator ──────────────────────────────────────
+        function showTyping() {
+            const el = document.createElement('div');
+            el.id = 'typing-indicator';
+            el.className = 'flex justify-start animate-fade-in-up';
+            el.innerHTML = `
+                <div class="msg-bot px-5 py-4 flex items-center gap-1.5">
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                </div>`;
+            chatMessages.appendChild(el);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTyping() {
+            document.getElementById('typing-indicator')?.remove();
+        }
+
+        // ══════════════════════════════════════════════════════════
+        //  DRAG & DROP + FILE UPLOAD
+        // ══════════════════════════════════════════════════════════
+
+        // Prevent default drag behaviors on the whole page
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => {
+            document.body.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); });
+        });
+
+        // Highlight drop zone on drag
+        ['dragenter', 'dragover'].forEach(evt => {
+            dropZone.addEventListener(evt, () => dropZone.classList.add('drag-over'));
+        });
+        ['dragleave', 'drop'].forEach(evt => {
+            dropZone.addEventListener(evt, () => dropZone.classList.remove('drag-over'));
+        });
+
+        // Handle drop
+        dropZone.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) uploadFiles(files);
+        });
+
+        // Handle file input selection
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            if (files.length > 0) uploadFiles(files);
+            e.target.value = ''; // reset so same file can be re-selected
+        }
+
+        // Upload files to the backend
+        async function uploadFiles(fileList) {
+            if (isUploading) return;
+            isUploading = true;
+
+            const formData = new FormData();
+            for (const file of fileList) {
+                formData.append('files', file);
+            }
+
+            // Show progress
+            uploadProgress.classList.remove('hidden');
+            uploadBar.style.width = '0%';
+            uploadStatus.textContent = `Uploading ${fileList.length} file(s)…`;
+
+            // Animate progress (fake progress since fetch doesn't support progress)
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress = Math.min(progress + Math.random() * 15, 85);
+                uploadBar.style.width = progress + '%';
+            }, 300);
+
+            try {
+                const res = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                clearInterval(progressInterval);
+                uploadBar.style.width = '100%';
+
+                const data = await res.json();
+
+                if (!res.ok) throw new Error(data.detail || 'Upload failed');
+
+                // Show success status
+                const uploaded = data.uploaded || [];
+                const errors = data.errors || [];
+                const ingestion = data.ingestion || {};
+
+                let statusMsg = `✅ Uploaded ${uploaded.length} file(s)`;
+                if (ingestion.num_chunks) statusMsg += ` — ${ingestion.num_chunks} chunks indexed`;
+                if (errors.length > 0) statusMsg += `\n⚠️ ${errors.join('; ')}`;
+
+                uploadStatus.textContent = statusMsg;
+
+                // Show ingestion status
+                showIngestStatus(statusMsg);
+
+                await loadDocuments();
+            } catch (err) {
+                clearInterval(progressInterval);
+                uploadBar.style.width = '100%';
+                uploadBar.style.background = 'linear-gradient(90deg, #ef4444, #f87171)';
+                uploadStatus.textContent = `❌ ${err.message}`;
+                showIngestStatus(`❌ ${err.message}`, true);
+            } finally {
+                isUploading = false;
+                setTimeout(() => {
+                    uploadProgress.classList.add('hidden');
+                    uploadBar.style.width = '0%';
+                    uploadBar.style.background = '';
+                }, 3000);
+            }
+        }
+
+        // ── Import Database ────────────────────────────────────────
+        async function importDatabase() {
+            const btn = document.getElementById('btn-import-db');
+            const btnText = document.getElementById('btn-import-db-text');
+            const origText = btnText.textContent;
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-wait');
+            btnText.textContent = 'Importing tables…';
+
+            try {
+                const res = await fetch('/import-database', { method: 'POST' });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || 'Import failed');
+
+                const msg = `✅ DB imported: ${data.num_chunks} chunks from ${data.tables?.length || 0} tables`;
+                showIngestStatus(msg);
+                btnText.textContent = '✅ Imported!';
+                await loadDocuments();
+
+                setTimeout(() => { btnText.textContent = origText; }, 3000);
+            } catch (err) {
+                showIngestStatus(`❌ DB import failed: ${err.message}`, true);
+                btnText.textContent = origText;
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-wait');
+            }
+        }
+
+        // ── Show ingestion status badge ───────────────────────────
+        function showIngestStatus(msg, isError = false) {
+            ingestStatus.classList.remove('hidden');
+            const div = ingestStatus.querySelector('div');
+            div.textContent = msg;
+            div.className = `text-xs rounded-lg px-3 py-2 animate-slide-in ${isError ? 'text-red-400 bg-red-500/10' : 'text-brand-300 bg-brand-500/10'
+                }`;
+            setTimeout(() => ingestStatus.classList.add('hidden'), 6000);
+        }
+
+        // ── Load document list ────────────────────────────────────
+        async function loadDocuments() {
+            try {
+                const res = await fetch('/documents');
+                const data = await res.json();
+                if (data.documents.length === 0) {
+                    docList.innerHTML = '<p class="text-xs text-white/25 italic px-1">No documents yet.</p>';
+                    docCount.textContent = '';
+                    return;
+                }
+
+                docCount.textContent = `${data.documents.length} file${data.documents.length > 1 ? 's' : ''}`;
+                docList.innerHTML = '';
+
+                data.documents.forEach((doc, i) => {
+                    const chip = document.createElement('div');
+                    chip.className = 'file-chip group flex items-center gap-2.5 px-2.5 py-2 rounded-xl cursor-default';
+                    chip.style.animationDelay = `${i * 50}ms`;
+                    chip.classList.add('animate-slide-in');
+                    chip.innerHTML = `
+                        ${fileIcon(doc.type)}
+                        <div class="min-w-0 flex-1">
+                            <p class="text-xs font-medium text-white/70 truncate">${doc.name}</p>
+                            <p class="text-[10px] text-white/30">${formatBytes(doc.size)}</p>
+                        </div>
+                        <button class="delete-btn p-1 rounded-md hover:bg-red-500/20 hover:text-red-400 text-white/20 transition-all"
+                                onclick="deleteDocument('${doc.name}', event)" title="Remove">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+                            </svg>
+                        </button>`;
+                    docList.appendChild(chip);
+                });
+            } catch {
+                docList.innerHTML = '<p class="text-xs text-red-400/60 px-1">Failed to load documents.</p>';
+            }
+        }
+
+        // ── Delete a document ─────────────────────────────────────
+        async function deleteDocument(name, e) {
+            e.stopPropagation();
+            if (!confirm(`Delete "${name}"? The index will be rebuilt.`)) return;
+
+            try {
+                const res = await fetch(`/documents/${encodeURIComponent(name)}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || 'Delete failed');
+                showIngestStatus(`🗑️ ${name} deleted`);
+                await loadDocuments();
+            } catch (err) {
+                showIngestStatus(`❌ ${err.message}`, true);
+            }
+        }
+
+        // ── Chat submit ───────────────────────────────────────────
+        async function handleSubmit(e) {
+            e.preventDefault();
+            const query = queryInput.value.trim();
+            if (!query || isLoading) return;
+
+            isLoading = true;
+            btnSend.disabled = true;
+            queryInput.value = '';
+            autoResize(queryInput);
+
+            addMessage('user', query);
+            showTyping();
+
+            // Capture history before we send
+            const historyObj = [...chatHistory];
+            // Push user message for future requests
+            chatHistory.push({ role: 'user', content: query });
+
+            try {
+                const res = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query, history: historyObj }),
+                });
+                const data = await res.json();
+
+                hideTyping();
+
+                if (!res.ok) throw new Error(data.detail || 'Something went wrong');
+
+                addMessage('bot', data.answer, data.sources);
+                chatHistory.push({ role: 'bot', content: data.answer });
+            } catch (err) {
+                hideTyping();
+                addMessage('bot', `⚠️ Error: ${err.message}`);
+                // Remove the user message from history since the turn failed
+                chatHistory.pop();
+            } finally {
+                isLoading = false;
+                btnSend.disabled = !queryInput.value.trim();
+            }
+        }
+
+        // ── Clear chat ────────────────────────────────────────────
+        function clearChat() {
+            chatHistory = [];
+            chatMessages.innerHTML = `
+                <div id="welcome" class="flex flex-col items-center justify-center h-full text-center animate-fade-in-up">
+                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-500/20 to-brand-700/20 border border-brand-500/20 flex items-center justify-center mb-6 animate-float">
+                        <svg class="w-10 h-10 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white/80 mb-2">Welcome to RAG Chat</h3>
+                    <p class="text-sm text-white/35 max-w-md leading-relaxed">
+                        Drag & drop your files into the sidebar or click <strong class="text-brand-400">browse</strong> to upload.
+                        Supported formats include PDF, Word, JSON, CSV, Markdown, and more.
+                    </p>
+                </div>`;
+        }
+
+        // ── Tab Switching ─────────────────────────────────────────
+        let allChunks = [];
+
+        function switchTab(tab) {
+            const viewChat = document.getElementById('view-chat');
+            const viewEmb  = document.getElementById('view-embeddings');
+            const tabChat  = document.getElementById('tab-chat');
+            const tabEmb   = document.getElementById('tab-embeddings');
+            const btnClear = document.getElementById('btn-clear');
+
+            const activeClass   = 'tab-btn text-xs font-semibold px-4 py-1.5 rounded-md transition-all bg-brand-500/20 text-brand-300 shadow-sm';
+            const inactiveClass = 'tab-btn text-xs font-semibold px-4 py-1.5 rounded-md transition-all text-white/40 hover:text-white/60';
+
+            if (tab === 'chat') {
+                viewChat.classList.remove('hidden');
+                viewEmb.classList.add('hidden');
+                tabChat.className = activeClass;
+                tabEmb.className  = inactiveClass;
+                btnClear.classList.remove('hidden');
+            } else {
+                viewChat.classList.add('hidden');
+                viewEmb.classList.remove('hidden');
+                tabChat.className = inactiveClass;
+                tabEmb.className  = activeClass;
+                btnClear.classList.add('hidden');
+                loadEmbeddings();
+            }
+        }
+
+        // ── Load Embeddings ────────────────────────────────────────
+        async function loadEmbeddings() {
+            const grid  = document.getElementById('emb-grid');
+            const count = document.getElementById('embeddings-count');
+            grid.innerHTML = `<div class="col-span-full py-16 text-center">
+                <div class="inline-flex items-center gap-2 text-sm text-white/30">
+                    <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                    Loading chunks from FAISS…
+                </div>
+            </div>`;
+
+            try {
+                const res  = await fetch('/embeddings');
+                const data = await res.json();
+                allChunks  = data.chunks || [];
+
+                if (allChunks.length === 0) {
+                    count.textContent = '0 chunks';
+                    grid.innerHTML = `
+                        <div class="col-span-full py-16 text-center">
+                            <svg class="w-12 h-12 mx-auto text-white/10 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375" />
+                            </svg>
+                            <p class="text-sm text-white/30">No embeddings yet</p>
+                            <p class="text-xs text-white/20 mt-1">Upload documents to populate the vector store</p>
+                        </div>`;
+                    return;
+                }
+
+                count.textContent = `${allChunks.length} chunks · ${data.dimensions || '?'}D vectors`;
+                renderChunks(allChunks);
+            } catch (err) {
+                grid.innerHTML = `<div class="col-span-full py-10 text-center text-sm text-red-400">Error: ${err.message}</div>`;
+            }
+        }
+
+        function renderChunks(chunks) {
+            const grid = document.getElementById('emb-grid');
+            grid.innerHTML = '';
+
+            chunks.forEach((chunk, i) => {
+                const source = chunk.metadata?.source || 'Unknown';
+                const vec = chunk.embedding || [];
+                const dims = vec.length;
+
+                // Format vector preview: show first 12 values then "..."
+                const vecPreview = vec.slice(0, 16)
+                    .map(v => v.toFixed(6))
+                    .join(', ');
+                const vecFull = vec.map(v => v.toFixed(6)).join(', ');
+
+                // Text preview (short)
+                const textSnippet = chunk.content
+                    .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                    .substring(0, 150)
+                    .replace(/\n/g, ' ');
+
+                const card = document.createElement('div');
+                card.className = 'glass rounded-xl p-4 flex flex-col gap-2.5 hover:bg-white/[0.06] transition duration-200 animate-fade-in-up';
+                card.style.animationDelay = `${(i % 12) * 30}ms`;
+
+                const cardId = `emb-card-${i}`;
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="inline-flex items-center gap-1.5 text-[10px] font-semibold text-amber-300/90 bg-amber-500/15 px-2.5 py-0.5 rounded-md">
+                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                            </svg>
+                            ${source}
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] text-emerald-400/70 font-mono bg-emerald-500/10 px-1.5 py-0.5 rounded">${dims}D</span>
+                            <span class="text-[9px] text-white/20 font-mono bg-white/5 px-1.5 py-0.5 rounded">ID: ${chunk.id}</span>
+                        </div>
+                    </div>
+
+                    <!-- Text content (collapsed) -->
+                    <div class="text-[10px] text-white/30 leading-relaxed truncate italic">
+                        "${textSnippet}${chunk.content.length > 150 ? '…' : ''}"
+                    </div>
+
+                    <!-- Embedding vector -->
+                    <div class="relative">
+                        <div class="text-[9px] font-semibold text-brand-400/60 uppercase tracking-widest mb-1">Embedding Vector</div>
+                        <div id="${cardId}-short" class="text-[10px] text-cyan-300/70 font-mono leading-relaxed bg-black/20 rounded-lg p-2.5 overflow-hidden">
+                            [${vecPreview}${dims > 16 ? ', <span class="text-white/25">… ${dims - 16} more</span>' : ''}]
+                            ${dims > 16 ? `<button onclick="toggleVector('${cardId}')" class="ml-2 text-[9px] text-brand-400 hover:text-brand-300 underline">show all</button>` : ''}
+                        </div>
+                        <div id="${cardId}-full" class="hidden text-[10px] text-cyan-300/70 font-mono leading-relaxed bg-black/20 rounded-lg p-2.5 max-h-48 overflow-y-auto">
+                            [${vecFull}]
+                            <button onclick="toggleVector('${cardId}')" class="block mt-1 text-[9px] text-brand-400 hover:text-brand-300 underline">collapse</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function toggleVector(cardId) {
+            const short = document.getElementById(cardId + '-short');
+            const full  = document.getElementById(cardId + '-full');
+            short.classList.toggle('hidden');
+            full.classList.toggle('hidden');
+        }
+
+        function filterEmbeddings(query) {
+            const q = query.toLowerCase().trim();
+            if (!q) {
+                renderChunks(allChunks);
+                return;
+            }
+            const filtered = allChunks.filter(c =>
+                c.content.toLowerCase().includes(q) ||
+                (c.metadata?.source || '').toLowerCase().includes(q)
+            );
+            renderChunks(filtered);
+            document.getElementById('embeddings-count').textContent = `${filtered.length} / ${allChunks.length} chunks`;
+        }
+
+        // ── Init ──────────────────────────────────────────────────
+        loadDocuments();
+    </script>
+</body>
+
+</html>

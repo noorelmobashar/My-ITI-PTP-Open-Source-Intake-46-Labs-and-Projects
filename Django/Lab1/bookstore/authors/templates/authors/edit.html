@@ -1,0 +1,224 @@
+{% extends 'layouts/navbar_main_footer.html' %}
+
+{% block title %}Edit Author | BookHaven{% endblock %}
+
+{% block extra_head %}
+<style>
+	.create-shell {
+		max-width: 880px;
+		margin: 0 auto;
+	}
+
+	.create-card {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow);
+		padding: clamp(18px, 3vw, 28px);
+	}
+
+	.heading {
+		margin-bottom: 18px;
+	}
+
+	.heading h1 {
+		margin: 0 0 8px;
+		font-family: 'Playfair Display', serif;
+		font-size: clamp(1.6rem, 1.2rem + 1.1vw, 2.15rem);
+	}
+
+	.heading p {
+		margin: 0;
+		color: var(--muted);
+	}
+
+	.errors {
+		margin: 0 0 14px;
+		padding: 10px 12px;
+		border-radius: 12px;
+		border: 1px solid #e7b2a8;
+		background: #fff2ef;
+		color: #8a2e22;
+	}
+
+	.errors ul {
+		margin: 0;
+		padding-left: 18px;
+	}
+
+	.field {
+		display: grid;
+		gap: 6px;
+		margin-bottom: 14px;
+	}
+
+	.field.full {
+		grid-column: 1 / -1;
+	}
+
+	label {
+		font-size: 0.9rem;
+		color: var(--muted);
+		font-weight: 500;
+	}
+
+	input,
+	textarea,
+	select {
+		width: 100%;
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		background: #fff;
+		padding: 10px 12px;
+		font: inherit;
+	}
+
+	input:focus,
+	textarea:focus,
+	select:focus {
+		outline: 2px solid rgba(14, 122, 106, 0.24);
+		border-color: var(--primary);
+	}
+
+	textarea {
+		min-height: 150px;
+		resize: vertical;
+	}
+
+	input[type='checkbox'] {
+		width: auto;
+		accent-color: var(--primary);
+	}
+
+	.books-panel {
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		background: #fff;
+		padding: 12px;
+	}
+
+	.books-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 8px;
+	}
+
+	.books-grid > div {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		border: 1px solid rgba(216, 207, 191, 0.85);
+		border-radius: 10px;
+		padding: 8px 10px;
+		background: #fcfaf5;
+	}
+
+	.empty-books {
+		margin: 0;
+		color: var(--muted);
+	}
+
+	.hint {
+		margin: 0;
+		color: var(--muted);
+		font-size: 0.83rem;
+	}
+
+	.field-error {
+		margin: 0;
+		color: #8a2e22;
+		font-size: 0.84rem;
+	}
+
+	.actions {
+		margin-top: 16px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		flex-wrap: wrap;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 10px 16px;
+		border-radius: 999px;
+		border: 1px solid transparent;
+		font-weight: 600;
+		cursor: pointer;
+	}
+
+	.btn-primary {
+		background: var(--primary);
+		color: #fff;
+		border-color: var(--primary);
+	}
+
+	.btn-primary:hover {
+		background: var(--primary-dark);
+		border-color: var(--primary-dark);
+	}
+
+	.btn-ghost {
+		background: transparent;
+		color: var(--primary-dark);
+		border-color: rgba(14, 122, 106, 0.35);
+	}
+
+	.btn-ghost:hover {
+		background: rgba(14, 122, 106, 0.08);
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="create-shell">
+	<article class="create-card">
+		<header class="heading">
+			<h1>Edit Author</h1>
+			<p>Update author profile details and linked books.</p>
+		</header>
+
+		{% if form and form.errors %}
+		<div class="errors">
+			<ul>
+				{% for field in form %}
+					{% for error in field.errors %}
+					<li>{{ error }}</li>
+					{% endfor %}
+				{% endfor %}
+				{% for error in form.non_field_errors %}
+				<li>{{ error }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+
+		<form action="" method="post">
+			{% csrf_token %}
+
+			{% for field in form %}
+			<div class="field">
+				<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+				{{ field }}
+
+				{% if field.help_text %}
+				<p class="hint">{{ field.help_text }}</p>
+				{% endif %}
+
+				{% for error in field.errors %}
+				<p class="field-error">{{ error }}</p>
+				{% endfor %}
+			</div>
+			{% endfor %}
+
+			<div class="actions">
+				<button type="submit" class="btn btn-primary">Save Changes</button>
+				<a href="{% url 'authors.show' author.id %}" class="btn btn-ghost">Cancel</a>
+			</div>
+		</form>
+	</article>
+</section>
+{% endblock %}

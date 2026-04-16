@@ -1,0 +1,150 @@
+/* BookHaven admin skin: polished, readable, and action-first. */
+
+:root {
+    --bh-primary: #0b7a6e;
+    --bh-primary-dark: #085a52;
+    --bh-accent: #de8f32;
+    --bh-ink: #1f252b;
+    --bh-muted: #5e6670;
+    --bh-card-bg: #fffdf8;
+    --bh-border: #e2d7c3;
+}
+
+body {
+    color: var(--bh-ink);
+    background:
+        radial-gradient(circle at 8% -10%, rgba(222, 143, 50, 0.12), transparent 28%),
+        radial-gradient(circle at 92% 0%, rgba(11, 122, 110, 0.12), transparent 24%),
+        #f8f5ef;
+}
+
+.main-header.navbar {
+    border-bottom: 1px solid var(--bh-border);
+    box-shadow: 0 6px 18px rgba(28, 34, 43, 0.07);
+}
+
+.brand-link {
+    border-bottom: 1px solid rgba(226, 215, 195, 0.9);
+}
+
+.brand-text {
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.content-wrapper {
+    background: transparent;
+}
+
+.content-header h1,
+.card-title,
+.content-header .m-0 {
+    letter-spacing: 0.2px;
+    font-weight: 700;
+}
+
+.card,
+.info-box,
+.small-box {
+    border: 1px solid var(--bh-border);
+    border-radius: 14px;
+    background: var(--bh-card-bg);
+    box-shadow: 0 10px 26px rgba(28, 34, 43, 0.08);
+}
+
+.card {
+    overflow: hidden;
+}
+
+.card-header {
+    border-bottom: 1px solid rgba(226, 215, 195, 0.9);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(251, 246, 237, 0.94) 100%);
+}
+
+.table thead th {
+    font-size: 0.83rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--bh-muted);
+    border-bottom: 1px solid var(--bh-border);
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(250, 245, 236, 0.7);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(11, 122, 110, 0.06);
+}
+
+.btn,
+.select2-container--default .select2-selection--single,
+input.form-control,
+textarea.form-control,
+.custom-select {
+    border-radius: 10px;
+}
+
+.btn-success,
+.btn-primary {
+    background: linear-gradient(135deg, var(--bh-primary) 0%, var(--bh-primary-dark) 100%);
+    border-color: var(--bh-primary-dark);
+}
+
+.btn-success:hover,
+.btn-primary:hover {
+    filter: brightness(0.96);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #c54646 0%, #9f3434 100%);
+    border-color: #9f3434;
+}
+
+.btn-outline-secondary {
+    border-color: rgba(31, 37, 43, 0.2);
+}
+
+.nav-sidebar .nav-item > .nav-link {
+    border-radius: 10px;
+    margin-bottom: 4px;
+}
+
+.nav-sidebar .nav-item > .nav-link.active {
+    background: linear-gradient(135deg, rgba(11, 122, 110, 0.95), rgba(8, 90, 82, 0.95));
+    color: #fff;
+}
+
+.breadcrumb {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(226, 215, 195, 0.8);
+    border-radius: 999px;
+    padding: 6px 12px;
+}
+
+.content-header {
+    margin-bottom: 10px;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border-radius: 10px;
+    border-color: rgba(31, 37, 43, 0.2);
+}
+
+.form-group label,
+.col-form-label {
+    font-weight: 600;
+    color: var(--bh-ink);
+}
+
+@media (max-width: 768px) {
+    .content-header .container-fluid {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+}

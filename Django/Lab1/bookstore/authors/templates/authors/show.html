@@ -1,0 +1,255 @@
+{% extends 'layouts/navbar_main_footer.html' %}
+
+{% block title %}Author Details | BookHaven{% endblock %}
+
+{% block extra_head %}
+<style>
+	.author-details {
+		display: grid;
+		grid-template-columns: 1.05fr 1fr;
+		gap: 22px;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow);
+		overflow: hidden;
+	}
+
+	.identity {
+		padding: 26px;
+		background:
+			radial-gradient(circle at 90% 8%, rgba(222, 143, 50, 0.26), transparent 40%),
+			#fcf8f0;
+		display: grid;
+		align-content: start;
+		gap: 10px;
+	}
+
+	.tag {
+		display: inline-flex;
+		padding: 5px 10px;
+		border-radius: 999px;
+		background: rgba(14, 122, 106, 0.12);
+		color: var(--primary-dark);
+		font-size: 0.84rem;
+		font-weight: 600;
+		width: fit-content;
+	}
+
+	.name {
+		margin: 0;
+		font-family: 'Playfair Display', serif;
+		font-size: clamp(1.7rem, 1.15rem + 1.5vw, 2.4rem);
+		line-height: 1.15;
+	}
+
+	.email {
+		margin: 0;
+		color: var(--muted);
+	}
+
+	.bio {
+		margin: 6px 0 0;
+		line-height: 1.7;
+		color: var(--text);
+	}
+
+	.details-panel {
+		padding: 22px;
+		display: grid;
+		gap: 16px;
+	}
+
+	.facts {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: 10px;
+	}
+
+	.facts li {
+		padding: 10px 12px;
+		border-radius: var(--radius-sm);
+		background: #faf6ee;
+		border: 1px solid rgba(216, 207, 191, 0.85);
+		display: flex;
+		justify-content: space-between;
+		gap: 10px;
+		font-size: 0.95rem;
+	}
+
+	.facts strong {
+		color: var(--muted);
+		font-weight: 500;
+	}
+
+	.books-title {
+		margin: 0;
+		font-size: 1.05rem;
+	}
+
+	.books-list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: 8px;
+	}
+
+	.books-list li {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 10px;
+		border: 1px solid rgba(216, 207, 191, 0.85);
+		border-radius: var(--radius-sm);
+		padding: 10px 12px;
+		background: #fffdf8;
+	}
+
+	.book-name {
+		margin: 0;
+		font-size: 0.95rem;
+		font-weight: 500;
+	}
+
+	.show-book {
+		padding: 6px 10px;
+		border-radius: 999px;
+		border: 1px solid rgba(14, 122, 106, 0.35);
+		color: var(--primary-dark);
+		font-size: 0.83rem;
+		font-weight: 600;
+	}
+
+	.show-book:hover {
+		background: var(--primary);
+		border-color: var(--primary);
+		color: #fff;
+	}
+
+	.empty-books {
+		margin: 0;
+		padding: 12px;
+		border-radius: var(--radius-sm);
+		background: #fff8eb;
+		border: 1px solid #eadfca;
+		color: var(--muted);
+	}
+
+	.actions {
+		display: flex;
+		gap: 10px;
+		flex-wrap: wrap;
+		margin-top: 4px;
+	}
+
+	.actions form {
+		margin: 0;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 9px 14px;
+		border-radius: 999px;
+		font-size: 0.88rem;
+		font-weight: 700;
+		letter-spacing: 0.2px;
+		cursor: pointer;
+		border: 1px solid transparent;
+		background: #fff;
+		color: var(--primary-dark);
+		transition: 0.2s ease;
+	}
+
+	.btn-neutral {
+		border-color: rgba(216, 207, 191, 0.9);
+		color: var(--text);
+	}
+
+	.btn-primary {
+		border-color: rgba(14, 122, 106, 0.35);
+		color: var(--primary-dark);
+	}
+
+	.btn-danger {
+		border-color: rgba(185, 57, 57, 0.35);
+		color: #9a2f2f;
+	}
+
+	.btn-neutral:hover {
+		background: #f4efe6;
+	}
+
+	.btn-primary:hover {
+		background: var(--primary);
+		border-color: var(--primary);
+		color: #fff;
+	}
+
+	.btn-danger:hover {
+		background: #b93939;
+		border-color: #b93939;
+		color: #fff;
+	}
+
+	@media (max-width: 860px) {
+		.author-details {
+			grid-template-columns: 1fr;
+		}
+
+		.identity,
+		.details-panel {
+			padding: 18px;
+		}
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="author-details">
+	<div class="identity">
+		<span class="tag">Author Profile</span>
+		<h1 class="name">{{ author.name|default:'Unknown Author' }}</h1>
+		<p class="email">{{ author.email|default:'No email provided' }}</p>
+		<p class="bio">{{ author.bio|default:'No biography available for this author yet.' }}</p>
+	</div>
+
+	<div class="details-panel">
+		<ul class="facts">
+			<li><strong>ID</strong><span>{{ author.id }}</span></li>
+			<li><strong>Gender</strong><span>{{ author.get_gender_display|default:'-' }}</span></li>
+			<li><strong>Books Count</strong><span>{{ author.books.count }}</span></li>
+			<li><strong>Created</strong><span>{{ author.created_at|date:'Y-m-d H:i' }}</span></li>
+			<li><strong>Updated</strong><span>{{ author.updated_at|date:'Y-m-d H:i' }}</span></li>
+		</ul>
+
+		<h2 class="books-title">Books by this author</h2>
+
+		{% if author.books.all %}
+		<ul class="books-list">
+			{% for book in author.books.all %}
+			<li>
+				<p class="book-name">{{ book.title }}</p>
+				<a href="{% url 'books.show' book.id %}" class="show-book">Show</a>
+			</li>
+			{% endfor %}
+		</ul>
+		{% else %}
+		<p class="empty-books">This author does not have linked books yet.</p>
+		{% endif %}
+
+		<div class="actions">
+			<button type="button" class="btn btn-neutral" onclick="window.location.href='{% url 'authors.index' %}'">Go Back</button>
+			<button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'authors.edit' author.id %}'">Edit</button>
+			<form action="{% url 'authors.delete' author.id %}" method="post" onsubmit="return confirm('Delete this author?');">
+				{% csrf_token %}
+				<button type="submit" class="btn btn-danger">Delete</button>
+			</form>
+		</div>
+	</div>
+</section>
+{% endblock %}

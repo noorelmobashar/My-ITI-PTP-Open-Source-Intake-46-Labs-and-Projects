@@ -8,6 +8,18 @@
 		margin-bottom: 18px;
 	}
 
+	.heading-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 12px;
+	}
+
+	.heading-copy {
+		display: grid;
+		gap: 0;
+	}
+
 	.heading h1 {
 		margin: 0 0 8px;
 		font-family: 'Playfair Display', serif;
@@ -20,127 +32,124 @@
 		max-width: 760px;
 	}
 
-	.carousel-wrap {
-		position: relative;
-		display: grid;
-		grid-template-columns: auto 1fr auto;
-		gap: 10px;
+	.add-btn {
+		display: inline-flex;
 		align-items: center;
-	}
-
-	.carousel-btn {
-		width: 42px;
-		height: 42px;
-		border-radius: 50%;
-		border: 1px solid var(--border);
-		background: var(--surface);
-		color: var(--primary-dark);
-		font-size: 1.28rem;
-		cursor: pointer;
-		box-shadow: var(--shadow);
+		justify-content: center;
+		padding: 10px 15px;
+		border-radius: 999px;
+		background: var(--primary);
+		color: #fff;
+		font-weight: 600;
+		white-space: nowrap;
+		border: 1px solid var(--primary);
 		transition: 0.2s ease;
 	}
 
-	.carousel-btn:hover {
-		background: var(--primary);
-		color: #ffffff;
-		border-color: var(--primary);
+	.add-btn:hover {
+		background: var(--primary-dark);
+		border-color: var(--primary-dark);
 	}
 
-	.authors-track {
-		display: flex;
-		gap: 16px;
-		overflow-x: auto;
-		padding: 8px 2px;
-		scroll-behavior: smooth;
-		scrollbar-width: thin;
-	}
-
-	.authors-track::-webkit-scrollbar {
-		height: 8px;
-	}
-
-	.authors-track::-webkit-scrollbar-thumb {
-		background: rgba(14, 122, 106, 0.32);
-		border-radius: 10px;
+	.authors-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: 18px;
 	}
 
 	.author-card {
-		flex: 0 0 320px;
+		position: relative;
 		border-radius: var(--radius-md);
-		background: var(--surface);
+		background: linear-gradient(160deg, #fffdf8 0%, #f8f2e7 100%);
 		border: 1px solid var(--border);
-		box-shadow: var(--shadow);
+		box-shadow: 0 14px 28px rgba(28, 34, 43, 0.12);
 		overflow: hidden;
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		transition: transform 0.2s ease, box-shadow 0.2s ease;
+	}
+
+	.author-card:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 18px 34px rgba(28, 34, 43, 0.16);
 	}
 
 	.author-top {
-		padding: 16px;
+		padding: 18px 18px 12px;
+		display: flex;
+		gap: 12px;
+		align-items: center;
 		background:
-			radial-gradient(circle at 84% 14%, rgba(222, 143, 50, 0.22), transparent 50%),
+			radial-gradient(circle at 88% 12%, rgba(14, 122, 106, 0.2), transparent 54%),
+			radial-gradient(circle at 12% -10%, rgba(222, 143, 50, 0.26), transparent 44%),
 			#fcf8f0;
+	}
+
+	.author-avatar {
+		width: 42px;
+		height: 42px;
+		border-radius: 50%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 700;
+		font-size: 0.94rem;
+		color: #fff;
+		background: linear-gradient(135deg, #0e7a6a, #de8f32);
+		box-shadow: 0 8px 18px rgba(23, 33, 46, 0.22);
+	}
+
+	.author-headline {
+		display: grid;
+		gap: 2px;
 	}
 
 	.author-name {
 		margin: 0 0 4px;
-		font-size: 1.16rem;
+		font-size: 1.12rem;
 		font-weight: 700;
+		line-height: 1.2;
 	}
 
 	.author-sub {
 		margin: 0;
 		color: var(--muted);
+		font-size: 0.88rem;
+		word-break: break-word;
+	}
+
+	.author-bio {
+		margin: 0;
+		padding: 14px 18px 16px;
+		color: #36404a;
+		line-height: 1.58;
 		font-size: 0.94rem;
-	}
-
-	details {
 		border-top: 1px solid var(--border);
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 4;
+		line-clamp: 4;
+		overflow: hidden;
 	}
 
-	summary {
-		list-style: none;
-		cursor: pointer;
-		padding: 12px 16px;
-		font-weight: 600;
-		color: var(--primary-dark);
-	}
-
-	summary::-webkit-details-marker {
-		display: none;
-	}
-
-	.books-list {
-		margin: 0;
-		padding: 0 12px 14px;
-		list-style: none;
-		display: grid;
-		gap: 8px;
-	}
-
-	.books-list li {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 8px;
-		border: 1px solid rgba(216, 207, 191, 0.8);
-		border-radius: var(--radius-sm);
-		padding: 8px 10px;
-		background: #fffdf8;
-	}
-
-	.book-name {
-		margin: 0;
-		font-size: 0.95rem;
-		font-weight: 500;
+	.card-actions {
+		padding: 0 18px 18px;
 	}
 
 	.show {
-		padding: 6px 10px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		padding: 9px 12px;
 		border-radius: 999px;
 		border: 1px solid rgba(14, 122, 106, 0.35);
 		color: var(--primary-dark);
-		font-size: 0.83rem;
-		font-weight: 600;
+		font-size: 0.88rem;
+		font-weight: 700;
+		letter-spacing: 0.2px;
+		background: rgba(255, 255, 255, 0.78);
+		transition: 0.2s ease;
 	}
 
 	.show:hover {
@@ -156,16 +165,9 @@
 	}
 
 	@media (max-width: 650px) {
-		.carousel-wrap {
-			grid-template-columns: 1fr;
-		}
-
-		.carousel-btn {
-			display: none;
-		}
-
-		.author-card {
-			flex-basis: 87%;
+		.heading-row {
+			flex-direction: column;
+			align-items: flex-start;
 		}
 	}
 </style>
@@ -173,40 +175,34 @@
 
 {% block content %}
 <section class="heading">
-	<h1>Featured Authors</h1>
-	<p>Swipe or use arrows to browse authors. Expand each card to view their books, then use Show to open the single-book page.</p>
+	<div class="heading-row">
+		<div class="heading-copy">
+			<h1>Featured Authors</h1>
+			<p>Each card shows only the essentials. Open the profile to view full metadata and linked books.</p>
+		</div>
+		<a href="{% url 'authors.create' %}" class="add-btn">Add Author</a>
+	</div>
 </section>
 
 {% if authors %}
-<section class="carousel-wrap">
-	<button type="button" class="carousel-btn" data-scroll="left" aria-label="Scroll left">&#8249;</button>
-
-	<div class="authors-track" id="authors-track">
+<section class="authors-grid">
 		{% for author in authors %}
 		<article class="author-card">
 			<div class="author-top">
-				<h2 class="author-name">{{ author.name|default:'Unknown Author' }}</h2>
-				<p class="author-sub">ID {{ author.id }}{% if author.email %} | {{ author.email }}{% endif %}</p>
+				<span class="author-avatar">{{ author.name|default:'A'|slice:':1'|upper }}</span>
+				<div class="author-headline">
+					<h2 class="author-name">{{ author.name|default:'Unknown Author' }}</h2>
+					<p class="author-sub">{% if author.email %}{{ author.email }}{% else %}No email provided{% endif %}</p>
+				</div>
 			</div>
 
-			<details>
-				<summary>Books by this author</summary>
-				<ul class="books-list">
-					{% for book in books %}
-                        {% if book.author_id == author.id %}
-                            <li>
-                                <p class="book-name">{{ book.title }}</p>
-                                <a href="{% url 'books.show' book.id %}" class="show">Show</a>
-                            </li>
-                        {% endif %}
-					{% endfor %}
-				</ul>
-			</details>
+			<p class="author-bio">{{ author.bio|default:'No bio available yet for this author.'|truncatechars:180 }}</p>
+
+			<div class="card-actions">
+				<a href="{% url 'authors.show' author.id %}" class="show">Show Author</a>
+			</div>
 		</article>
 		{% endfor %}
-	</div>
-
-	<button type="button" class="carousel-btn" data-scroll="right" aria-label="Scroll right">&#8250;</button>
 </section>
 {% else %}
 <section class="card" style="padding: 30px; text-align: center;">
@@ -214,31 +210,4 @@
 	<p style="margin:0; color: var(--muted);">Once authors are created, their profiles and book lists will be shown here.</p>
 </section>
 {% endif %}
-{% endblock %}
-
-{% block extra_scripts %}
-<script>
-	(function () {
-		const track = document.getElementById('authors-track');
-		if (!track) {
-			return;
-		}
-
-		const step = 338;
-		const left = document.querySelector('[data-scroll="left"]');
-		const right = document.querySelector('[data-scroll="right"]');
-
-		if (left) {
-			left.addEventListener('click', function () {
-				track.scrollBy({ left: -step, behavior: 'smooth' });
-			});
-		}
-
-		if (right) {
-			right.addEventListener('click', function () {
-				track.scrollBy({ left: step, behavior: 'smooth' });
-			});
-		}
-	})();
-</script>
 {% endblock %}

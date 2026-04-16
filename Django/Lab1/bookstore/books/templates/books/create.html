@@ -1,0 +1,235 @@
+{% extends 'layouts/navbar_main_footer.html' %}
+
+{% block title %}Create Book | BookHaven{% endblock %}
+
+{% block extra_head %}
+<style>
+	.create-shell {
+		max-width: 840px;
+		margin: 0 auto;
+	}
+
+	.create-card {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow);
+		padding: clamp(18px, 3vw, 28px);
+	}
+
+	.heading {
+		margin-bottom: 18px;
+	}
+
+	.heading h1 {
+		margin: 0 0 8px;
+		font-family: 'Playfair Display', serif;
+		font-size: clamp(1.6rem, 1.2rem + 1.1vw, 2.15rem);
+	}
+
+	.heading p {
+		margin: 0;
+		color: var(--muted);
+	}
+
+	.errors {
+		margin: 0 0 14px;
+		padding: 10px 12px;
+		border-radius: 12px;
+		border: 1px solid #e7b2a8;
+		background: #fff2ef;
+		color: #8a2e22;
+	}
+
+	.errors ul {
+		margin: 0;
+		padding-left: 18px;
+	}
+
+	.form-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 14px;
+	}
+
+	.field {
+		display: grid;
+		gap: 6px;
+	}
+
+	.field.full {
+		grid-column: 1 / -1;
+	}
+
+	.checkbox-panel {
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		background: #fff;
+		padding: 10px 12px;
+	}
+
+	.choices {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 8px;
+	}
+
+	.choices > div {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		border: 1px solid rgba(216, 207, 191, 0.85);
+		border-radius: 10px;
+		padding: 8px 10px;
+		background: #fcfaf5;
+	}
+
+	.choices input[type='checkbox'] {
+		accent-color: var(--primary);
+	}
+
+	label {
+		font-size: 0.9rem;
+		color: var(--muted);
+		font-weight: 500;
+	}
+
+	input,
+	textarea {
+		width: 100%;
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		background: #fff;
+		padding: 10px 12px;
+		font: inherit;
+	}
+
+	input:focus,
+	textarea:focus {
+		outline: 2px solid rgba(14, 122, 106, 0.24);
+		border-color: var(--primary);
+	}
+
+	textarea {
+		min-height: 150px;
+		resize: vertical;
+	}
+
+	.hint {
+		margin: 0;
+		font-size: 0.83rem;
+		color: var(--muted);
+	}
+
+	.field-error {
+		margin: 0;
+		color: #8a2e22;
+		font-size: 0.84rem;
+	}
+
+	.actions {
+		margin-top: 16px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		flex-wrap: wrap;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 10px 16px;
+		border-radius: 999px;
+		border: 1px solid transparent;
+		font-weight: 600;
+		cursor: pointer;
+	}
+
+	.btn-primary {
+		background: var(--primary);
+		color: #fff;
+		border-color: var(--primary);
+	}
+
+	.btn-primary:hover {
+		background: var(--primary-dark);
+		border-color: var(--primary-dark);
+	}
+
+	.btn-ghost {
+		background: transparent;
+		color: var(--primary-dark);
+		border-color: rgba(14, 122, 106, 0.35);
+	}
+
+	.btn-ghost:hover {
+		background: rgba(14, 122, 106, 0.08);
+	}
+
+	@media (max-width: 760px) {
+		.form-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="create-shell">
+	<article class="create-card">
+		<header class="heading">
+			<h1>Create New Book</h1>
+			<p>Fill in the core metadata to add a new title to your catalog.</p>
+		</header>
+
+		{% if form and form.errors %}
+		<div class="errors">
+			<ul>
+				{% for field in form %}
+					{% for error in field.errors %}
+					<li>{{ error }}</li>
+					{% endfor %}
+				{% endfor %}
+				{% for error in form.non_field_errors %}
+				<li>{{ error }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+
+		<form action="" method="post" enctype="multipart/form-data" class="form-grid">
+			{% csrf_token %}
+
+			{% for field in form %}
+			<div class="field {% if field.name == 'brief' or field.name == 'authors' %}full{% endif %}">
+				<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+				{% if field.name == 'authors' %}
+				<div class="checkbox-panel">
+					<div class="choices">
+						{{ field }}
+					</div>
+				</div>
+				{% else %}
+				{{ field }}
+				{% endif %}
+
+				{% if field.help_text %}
+				<p class="hint">{{ field.help_text }}</p>
+				{% endif %}
+
+				{% for error in field.errors %}
+				<p class="field-error">{{ error }}</p>
+				{% endfor %}
+			</div>
+			{% endfor %}
+
+			<div class="field full actions">
+				<button type="submit" class="btn btn-primary">Create Book</button>
+				<a href="{% url 'books.index' %}" class="btn btn-ghost">Cancel</a>
+			</div>
+		</form>
+	</article>
+</section>
+{% endblock %}

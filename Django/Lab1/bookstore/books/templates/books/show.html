@@ -4,8 +4,6 @@
 
 {% block extra_head %}
 
-{% load static %}
-
 <style>
 	.book-details {
 		display: grid;
@@ -87,15 +85,62 @@
 		font-weight: 700;
 	}
 
-	.back-link {
+	.actions {
 		margin-top: 20px;
-		display: inline-block;
-		color: var(--primary-dark);
-		font-weight: 600;
+		display: flex;
+		gap: 10px;
+		flex-wrap: wrap;
 	}
 
-	.back-link:hover {
-		text-decoration: underline;
+	.actions form {
+		margin: 0;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 9px 14px;
+		border-radius: 999px;
+		font-size: 0.88rem;
+		font-weight: 700;
+		letter-spacing: 0.2px;
+		cursor: pointer;
+		border: 1px solid transparent;
+		background: #fff;
+		color: var(--primary-dark);
+		transition: 0.2s ease;
+	}
+
+	.btn-neutral {
+		border-color: rgba(216, 207, 191, 0.9);
+		color: var(--text);
+	}
+
+	.btn-primary {
+		border-color: rgba(14, 122, 106, 0.35);
+		color: var(--primary-dark);
+	}
+
+	.btn-danger {
+		border-color: rgba(185, 57, 57, 0.35);
+		color: #9a2f2f;
+	}
+
+	.btn-neutral:hover {
+		background: #f4efe6;
+	}
+
+	.btn-primary:hover {
+		background: var(--primary);
+		border-color: var(--primary);
+		color: #fff;
+	}
+
+	.btn-danger:hover {
+		background: #b93939;
+		border-color: #b93939;
+		color: #fff;
 	}
 
 	@media (max-width: 860px) {
@@ -117,7 +162,7 @@
 {% block content %}
 <section class="book-details">
 	<div class="visual">
-		<img src="{% static book.image %}" alt="{{ book.title }}">
+		<img src="{{ book.image.url }}" alt="{{ book.title }}">
 	</div>
 
 	<div class="content">
@@ -130,9 +175,18 @@
 			<li><strong>Title</strong><span>{{ book.title }}</span></li>
 			<li><strong>No. of Pages</strong><span>{{ book.no_of_page|default:'-' }}</span></li>
 			<li><strong>Price</strong><span class="price">${{ book.price|default:'0.00' }}</span></li>
+			<li><strong>Created</strong><span>{{ book.created_at|date:'Y-m-d H:i' }}</span></li>
+			<li><strong>Updated</strong><span>{{ book.updated_at|date:'Y-m-d H:i' }}</span></li>
 		</ul>
 
-		<a href="{% url 'books.index' %}" class="back-link">Back to all books</a>
+		<div class="actions">
+			<button type="button" class="btn btn-neutral" onclick="window.location.href='{% url 'books.index' %}'">Go Back</button>
+			<button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'books.edit' book.id %}'">Edit</button>
+			<form action="{% url 'books.delete' book.id %}" method="post" onsubmit="return confirm('Delete this book?');">
+				{% csrf_token %}
+				<button type="submit" class="btn btn-danger">Delete</button>
+			</form>
+		</div>
 	</div>
 </section>
 {% endblock %}

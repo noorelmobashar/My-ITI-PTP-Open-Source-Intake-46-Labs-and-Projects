@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -31,16 +31,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'books',
-    'authors',
-    'aboutus',
-    'contactus',
+    'books.apps.BooksConfig',
+    'authors.apps.AuthorsConfig',
+    'aboutus.apps.AboutusConfig',
+    'contactus.apps.ContactusConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -76,12 +78,24 @@ WSGI_APPLICATION = 'bookstore.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.getenv('DB_NAME'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('DB_NAME'),
+            'USER': os.getenv('DB_USER', ''),
+            'PASSWORD': os.getenv('DB_PASSWORD', ''),
+            'HOST': os.getenv('DB_HOST', 'localhost'),
+            'PORT': os.getenv('DB_PORT', '3306'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': str(BASE_DIR / 'db.sqlite3'),
+        }
+    }
 
 
 # Password validation
@@ -119,3 +133,65 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+JAZZMIN_SETTINGS = {
+    'site_title': 'BookHaven Admin',
+    'site_header': 'BookHaven Control Center',
+    'site_brand': 'BookHaven',
+    'site_logo_classes': 'img-circle',
+    'welcome_sign': 'Welcome to BookHaven Dashboard',
+    'copyright': 'BookHaven',
+    'search_model': ['books.Book', 'authors.Author'],
+    'show_sidebar': True,
+    'navigation_expanded': True,
+    'show_ui_builder': False,
+    'changeform_format': 'horizontal_tabs',
+    'related_modal_active': True,
+    'custom_css': 'admin/css/jazzmin-custom.css',
+    'topmenu_links': [
+        {'name': 'Public Site', 'url': '/', 'new_window': True},
+        {'app': 'books'},
+        {'app': 'authors'},
+    ],
+    'order_with_respect_to': ['books', 'authors', 'books.Book', 'authors.Author', 'auth'],
+    'icons': {
+        'auth': 'fas fa-users-cog',
+        'auth.user': 'fas fa-user',
+        'auth.Group': 'fas fa-user-friends',
+        'books': 'fas fa-book-open',
+        'books.Book': 'fas fa-book',
+        'authors': 'fas fa-feather-alt',
+        'authors.Author': 'fas fa-pen-fancy',
+    },
+    'default_icon_parents': 'fas fa-folder-open',
+    'default_icon_children': 'fas fa-circle',
+}
+
+
+JAZZMIN_UI_TWEAKS = {
+    'theme': 'flatly',
+    'dark_mode_theme': None,
+    'navbar': 'navbar-white navbar-light',
+    'no_navbar_border': False,
+    'accent': 'accent-teal',
+    'navbar_small_text': False,
+    'sidebar': 'sidebar-light-primary',
+    'sidebar_nav_small_text': False,
+    'sidebar_disable_expand': False,
+    'sidebar_nav_child_indent': True,
+    'sidebar_nav_compact_style': False,
+    'sidebar_nav_legacy_style': False,
+    'sidebar_nav_flat_style': True,
+    'button_classes': {
+        'primary': 'btn btn-success',
+        'secondary': 'btn btn-outline-secondary',
+        'info': 'btn btn-outline-info',
+        'warning': 'btn btn-warning',
+        'danger': 'btn btn-danger',
+        'success': 'btn btn-success',
+    },
+}
