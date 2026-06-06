@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "Hello World",
+    "content": "This is my first post."
+  },
+  {
+    "id": 2,
+    "title": "Getting Started with Express",
+    "content": "Express is a minimal and flexible Node.js web application framework."
+  },
+  {
+    "id": 3,
+    "title": "Node.js Basics",
+    "content": "Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine."
+  },
+  {
+    "id": 4,
+    "title": "New Post",
+    "content": "This is a new post"
+  }
+]
