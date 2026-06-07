@@ -1,0 +1,19 @@
+{
+  "name": "escalate_to_human",
+  "description": "Escalates the current conversation to a human support agent. Use this tool when the customer explicitly asks for a human, when the issue is too complex to resolve automatically, or when the customer expresses strong frustration.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "reason": {
+        "type": "string",
+        "description": "A concise summary of why the conversation is being escalated, e.g. 'Customer requests refund for damaged item'."
+      },
+      "urgency_level": {
+        "type": "string",
+        "enum": ["low", "medium", "high", "critical"],
+        "description": "The urgency of the escalation: 'low' for general inquiries, 'medium' for unresolved issues, 'high' for angry customers or time-sensitive problems, 'critical' for legal threats or safety concerns."
+      }
+    },
+    "required": ["reason", "urgency_level"]
+  }
+}

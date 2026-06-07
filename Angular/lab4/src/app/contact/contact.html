@@ -1,0 +1,103 @@
+<div class="max-w-6xl mx-auto my-8 px-4 sm:px-6 lg:px-8 space-y-12">
+  
+  <!-- Header Title -->
+  <div class="text-center max-w-xl mx-auto space-y-2">
+    <span class="text-xs font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-widest">Get In Touch</span>
+    <h1 class="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">We're Here to Help</h1>
+    <p class="text-sm text-zinc-500 dark:text-zinc-400">Feel free to reach out to us via any of our read-only communication channels.</p>
+  </div>
+
+  <!-- Contact Methods Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Call Us -->
+    <div class="p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 shadow-sm flex flex-col gap-3">
+      <div class="w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-950/50 text-violet-600 dark:text-violet-300 flex items-center justify-center font-bold text-lg">
+        📞
+      </div>
+      <h3 class="font-bold text-zinc-900 dark:text-white">Call Us</h3>
+      <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+        Direct Line: +20 (2) 2345-6789<br>
+        Support: 19999
+      </p>
+    </div>
+
+    <!-- Email -->
+    <div class="p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 shadow-sm flex flex-col gap-3">
+      <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-300 flex items-center justify-center font-bold text-lg">
+        ✉️
+      </div>
+      <h3 class="font-bold text-zinc-900 dark:text-white">Email Us</h3>
+      <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+        General: info&#64;eduportal.edu<br>
+        Registrar: registrar&#64;eduportal.edu
+      </p>
+    </div>
+
+    <!-- Office Hours -->
+    <div class="p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 shadow-sm flex flex-col gap-3">
+      <div class="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-950/50 text-rose-600 dark:text-rose-300 flex items-center justify-center font-bold text-lg">
+        ⏰
+      </div>
+      <h3 class="font-bold text-zinc-900 dark:text-white">Office Hours</h3>
+      <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+        Sun – Thu: 09:00 AM – 04:00 PM<br>
+        Fri – Sat: Closed
+      </p>
+    </div>
+
+    <!-- Location -->
+    <div class="p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 shadow-sm flex flex-col gap-3">
+      <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950/50 text-amber-600 dark:text-amber-300 flex items-center justify-center font-bold text-lg">
+        🏢
+      </div>
+      <h3 class="font-bold text-zinc-900 dark:text-white">Main Campus</h3>
+      <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+        Cairo Science Tower,<br>
+        Floor 12, Nasr City, Cairo
+      </p>
+    </div>
+  </div>
+
+  <!-- Mock Map (Visual Decoration, Read-only) -->
+  <div class="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200/50 dark:border-zinc-800/50 p-6 shadow-sm space-y-4">
+    <div class="flex justify-between items-center">
+      <h3 class="font-bold text-zinc-900 dark:text-white">Campus Geographic Location</h3>
+      <span class="px-2.5 py-1 text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 rounded-full border border-emerald-100 dark:border-emerald-900">
+        ● Online / Active
+      </span>
+    </div>
+    
+    <!-- Stylized Map SVG/HTML -->
+    <div class="relative w-full h-80 rounded-2xl bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 overflow-hidden flex items-center justify-center">
+      <!-- Grid Gridlines for Map feel -->
+      <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.03)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      
+      <!-- Stylized Road Graphics -->
+      <svg class="absolute inset-0 w-full h-full text-zinc-200/80 dark:text-zinc-800/40" xmlns="http://www.w3.org/2000/svg">
+        <line x1="-10" y1="120" x2="800" y2="120" stroke="currentColor" stroke-width="16" />
+        <line x1="250" y1="-10" x2="250" y2="400" stroke="currentColor" stroke-width="24" />
+        <line x1="550" y1="-10" x2="350" y2="400" stroke="currentColor" stroke-width="12" />
+        <!-- River/Park -->
+        <rect x="0" y="240" width="200" height="180" rx="20" fill="rgba(16,185,129,0.06)" />
+        <text x="50" y="320" fill="rgba(16,185,129,0.4)" font-size="14" font-weight="bold">Cairo Park</text>
+      </svg>
+      
+      <!-- Map Marker Overlay -->
+      <div class="absolute top-[120px] left-[250px] -translate-x-1/2 -translate-y-full flex flex-col items-center gap-1 animate-bounce">
+        <!-- Dialog box -->
+        <div class="bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 text-xs font-semibold px-2.5 py-1 rounded shadow-lg whitespace-nowrap">
+          EduPortal Main Campus
+        </div>
+        <!-- Pin Point -->
+        <div class="w-5 h-5 rounded-full bg-violet-600 border-4 border-white dark:border-zinc-950 shadow-md"></div>
+      </div>
+
+      <!-- Mock Map Controls (Decoration only) -->
+      <div class="absolute bottom-4 right-4 flex flex-col gap-2">
+        <button class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-650 dark:text-zinc-350 font-bold shadow-sm cursor-not-allowed">+</button>
+        <button class="w-8 h-8 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-650 dark:text-zinc-350 font-bold shadow-sm cursor-not-allowed">-</button>
+      </div>
+    </div>
+  </div>
+
+</div>

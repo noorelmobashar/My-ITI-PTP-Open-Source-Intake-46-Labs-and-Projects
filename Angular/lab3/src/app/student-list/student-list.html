@@ -1,0 +1,114 @@
+<div class="max-w-4xl mx-auto my-8 p-6 bg-white dark:bg-zinc-900 rounded-2xl shadow-lg border border-zinc-100 dark:border-zinc-800">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-extrabold text-zinc-950 dark:text-white">Students Management</h2>
+    <span class="px-3 py-1 text-xs font-semibold bg-violet-50 text-violet-700 dark:bg-violet-950 dark:text-violet-300 rounded-full border border-violet-100 dark:border-violet-850">
+      Total Students: {{ students.length }}
+    </span>
+  </div>
+  
+  <!-- Add Student Form (Inline) -->
+  <form class="bg-zinc-50/50 dark:bg-zinc-800/20 p-5 rounded-xl border border-zinc-200 dark:border-zinc-800 grid grid-cols-1 sm:grid-cols-3 gap-4 items-end mb-6">
+    <div class="flex flex-col gap-1.5">
+      <label class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Name</label>
+      <input type="text" name="studentName" placeholder="Enter name" [(ngModel)]="newName" 
+        class="w-full px-3.5 py-2 text-sm border border-zinc-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-colors">
+    </div>
+    <div class="flex flex-col gap-1.5">
+      <label class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Age</label>
+      <input type="number" name="studentAge" placeholder="Enter age" [(ngModel)]="newAge" 
+        class="w-full px-3.5 py-2 text-sm border border-zinc-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-colors">
+    </div>
+    <button type="submit" (click)="addStudent(); $event.preventDefault()" 
+      class="w-full px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 rounded-lg shadow-sm hover:shadow active:scale-[0.98] transition-all cursor-pointer">
+      Add Student
+    </button>
+  </form>
+
+  <!-- Students Table -->
+  <div class="overflow-hidden border border-zinc-200 dark:border-zinc-800 rounded-xl">
+    <table class="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
+      <thead class="bg-zinc-50 dark:bg-zinc-800/50">
+        <tr>
+          <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">ID</th>
+          <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Name</th>
+          <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Age</th>
+          <th scope="col" class="px-6 py-3.5 text-right text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-zinc-900">
+        <tr *ngFor="let student of students" class="hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-zinc-900 dark:text-white">{{ student.id }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-zinc-700 dark:text-zinc-300">{{ student.name }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-zinc-600 dark:text-zinc-400">{{ student.age }} years</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium">
+            <div class="flex justify-end gap-2">
+              <button (click)="viewStudent(student)" 
+                class="px-2.5 py-1 text-xs font-semibold text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950/50 rounded transition-colors cursor-pointer">
+                View
+              </button>
+              <button (click)="editStudent(student)" 
+                class="px-2.5 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/50 rounded transition-colors cursor-pointer">
+                Edit
+              </button>
+              <button (click)="deleteStudent(student.id)" 
+                class="px-2.5 py-1 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50 rounded transition-colors cursor-pointer">
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="students.length === 0">
+          <td colspan="4" class="px-6 py-10 text-center text-sm text-zinc-500 dark:text-zinc-400">
+            No students found. Add one above!
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- View Student Panel (Inline) -->
+  <div *ngIf="selectedStudentForView" class="mt-6 p-5 bg-violet-50/50 dark:bg-violet-950/10 rounded-xl border border-violet-100 dark:border-violet-900/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div class="flex flex-col gap-1">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 text-xs font-semibold text-violet-700 bg-violet-100 dark:text-violet-300 dark:bg-violet-900/50 rounded-full">ID: {{ selectedStudentForView.id }}</span>
+        <h3 class="text-base font-bold text-zinc-900 dark:text-white">{{ selectedStudentForView.name }}</h3>
+      </div>
+      <p class="text-sm text-zinc-600 dark:text-zinc-400">Student is <span class="font-semibold text-violet-600 dark:text-violet-400">{{ selectedStudentForView.age }}</span> years old.</p>
+    </div>
+    <button type="button" (click)="selectedStudentForView = null" 
+      class="px-4 py-2 text-sm font-semibold text-violet-700 hover:text-violet-800 dark:text-violet-300 dark:hover:text-violet-200 bg-white dark:bg-zinc-900 border border-violet-200 dark:border-violet-800 hover:bg-violet-50 dark:hover:bg-zinc-800 rounded-lg shadow-sm active:scale-[0.98] transition-all cursor-pointer">
+      Close Details
+    </button>
+  </div>
+
+  <!-- Edit Student Panel (Inline) -->
+  <div *ngIf="selectedStudentForEdit" class="mt-6 p-5 bg-zinc-50 dark:bg-zinc-800/30 rounded-xl border border-zinc-200 dark:border-zinc-800">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-sm font-semibold text-zinc-900 dark:text-white">Edit Student Details</h3>
+      <span class="text-xs text-zinc-500">ID: {{ selectedStudentForEdit.id }}</span>
+    </div>
+    
+    <form class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Name</label>
+        <input type="text" name="editStudentName" [(ngModel)]="editName" 
+          class="w-full px-3.5 py-2 text-sm border border-zinc-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors">
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Age</label>
+        <input type="number" name="editStudentAge" [(ngModel)]="editAge" 
+          class="w-full px-3.5 py-2 text-sm border border-zinc-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors">
+      </div>
+      <div class="flex gap-2">
+        <button type="submit" (click)="saveEdit(); $event.preventDefault()" 
+          class="flex-1 px-4 py-2 text-sm font-semibold text-white bg-amber-600 hover:bg-amber-500 rounded-lg shadow-sm hover:shadow active:scale-[0.98] transition-all cursor-pointer">
+          Save
+        </button>
+        <button type="button" (click)="selectedStudentForEdit = null" 
+          class="flex-1 px-4 py-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 rounded-lg shadow-sm active:scale-[0.98] transition-all cursor-pointer">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

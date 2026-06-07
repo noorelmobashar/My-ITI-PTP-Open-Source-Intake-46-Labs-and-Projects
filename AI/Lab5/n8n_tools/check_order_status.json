@@ -1,0 +1,14 @@
+{
+  "name": "check_order_status",
+  "description": "Looks up the current shipping status and estimated delivery date for a customer order. Use this tool when a customer asks about their order, shipment tracking, or delivery timeline.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "order_id": {
+        "type": "string",
+        "description": "The unique order identifier, e.g. 'ORD-20250428-7X3K'."
+      }
+    },
+    "required": ["order_id"]
+  }
+}
