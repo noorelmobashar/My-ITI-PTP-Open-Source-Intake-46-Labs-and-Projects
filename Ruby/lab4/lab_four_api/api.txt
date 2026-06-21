@@ -1,0 +1,204 @@
+{
+	"info": {
+		"_postman_id": "lab4b-api-collection",
+		"name": "Lab 4B - Rails API (User 1:M Post)",
+		"description": "API collection for Lab 4B - Rails API with User and Post resources (One-to-Many relationship). All CRUD operations for both Users and Posts.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000"
+		}
+	],
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": ["{{base_url}}"],
+							"path": ["users"]
+						},
+						"description": "Retrieves a list of all users."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/1",
+							"host": ["{{base_url}}"],
+							"path": ["users", "1"]
+						},
+						"description": "Retrieves a single user by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"name\": \"New User\",\n    \"email\": \"newuser@example.com\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": ["{{base_url}}"],
+							"path": ["users"]
+						},
+						"description": "Creates a new user with name and email."
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"name\": \"Updated User Name\",\n    \"email\": \"updated@example.com\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users/1",
+							"host": ["{{base_url}}"],
+							"path": ["users", "1"]
+						},
+						"description": "Updates an existing user by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/1",
+							"host": ["{{base_url}}"],
+							"path": ["users", "1"]
+						},
+						"description": "Deletes a user by ID. Also destroys associated posts (dependent: destroy)."
+					},
+					"response": []
+				}
+			],
+			"description": "CRUD operations for the User resource."
+		},
+		{
+			"name": "Posts",
+			"item": [
+				{
+					"name": "Get All Posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/posts",
+							"host": ["{{base_url}}"],
+							"path": ["posts"]
+						},
+						"description": "Retrieves a list of all posts."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Post",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/posts/1",
+							"host": ["{{base_url}}"],
+							"path": ["posts", "1"]
+						},
+						"description": "Retrieves a single post by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"post\": {\n    \"title\": \"New Post Title\",\n    \"body\": \"This is the body of the new post.\",\n    \"user_id\": 1\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/posts",
+							"host": ["{{base_url}}"],
+							"path": ["posts"]
+						},
+						"description": "Creates a new post associated with a user (via user_id)."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Post",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"post\": {\n    \"title\": \"Updated Post Title\",\n    \"body\": \"This is the updated body of the post.\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/posts/1",
+							"host": ["{{base_url}}"],
+							"path": ["posts", "1"]
+						},
+						"description": "Updates an existing post by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Post",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/posts/1",
+							"host": ["{{base_url}}"],
+							"path": ["posts", "1"]
+						},
+						"description": "Deletes a post by ID."
+					},
+					"response": []
+				}
+			],
+			"description": "CRUD operations for the Post resource (belongs_to User)."
+		}
+	]
+}

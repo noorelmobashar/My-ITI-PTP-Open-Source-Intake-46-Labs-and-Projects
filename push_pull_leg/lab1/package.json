@@ -1,0 +1,14 @@
+{
+  "name": "short-long-polling-lab",
+  "version": "1.0.0",
+  "description": "Chat app lab demonstrating short polling vs long polling",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "mongoose": "^9.7.1"
+  }
+}

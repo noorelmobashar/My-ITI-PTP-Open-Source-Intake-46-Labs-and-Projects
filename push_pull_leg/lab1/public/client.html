@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polling Chat Lab</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>💬 Chat — Client <span id="clientLabel"></span></h1>
+      <div class="mode-toggle">
+        <span class="mode-label">Polling Mode:</span>
+        <button id="btnShort" class="toggle-btn active" onclick="setMode('short')">Short Polling</button>
+        <button id="btnLong" class="toggle-btn" onclick="setMode('long')">Long Polling</button>
+      </div>
+    </header>
+
+    <div class="log-section">
+      <h3>📋 Console Log</h3>
+      <div id="consoleLog" class="console-log"></div>
+    </div>
+
+    <div class="chat-section">
+      <div id="messages" class="messages"></div>
+      <form id="sendForm" class="send-form">
+        <input
+          type="text"
+          id="msgInput"
+          placeholder="Type a message..."
+          autocomplete="off"
+          required
+        />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

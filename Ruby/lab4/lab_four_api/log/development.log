@@ -1,0 +1,163 @@
+  [1m[35m (3.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY) /*application='LabFourApi'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='LabFourApi'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='LabFourApi'*/[0m
+  [1m[36mCACHE ActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.5ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='LabFourApi'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.6ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2026-06-14 11:57:59.067865', '2026-06-14 11:57:59.067871') RETURNING "key" /*application='LabFourApi'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='LabFourApi'*/[0m
+Migrating to CreateUsers (20260614115707)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[35m (2.8ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='LabFourApi'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20260614115707') RETURNING "version" /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='LabFourApi'*/[0m
+Migrating to CreatePosts (20260614115719)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[35m (1.5ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar, "body" text, "user_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_5b5ddfd518"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+) /*application='LabFourApi'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_posts_on_user_id" ON "posts" ("user_id") /*application='LabFourApi'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20260614115719') RETURNING "version" /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='LabFourApi'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='LabFourApi'*/[0m
+  [1m[36mPost Load (0.5ms)[0m  [1m[34mSELECT "posts".* FROM "posts" /*application='LabFourApi'*/[0m
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mUser Create (3.1ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "created_at", "updated_at") VALUES ('Noor Elmobashar', 'noor@example.com', '2026-06-14 11:58:35.766267', '2026-06-14 11:58:35.766267') RETURNING "id" /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (7.4ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mUser Create (3.1ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "created_at", "updated_at") VALUES ('Ahmed Ali', 'ahmed@example.com', '2026-06-14 11:58:35.785153', '2026-06-14 11:58:35.785153') RETURNING "id" /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mUser Create (3.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "created_at", "updated_at") VALUES ('Sara Mohamed', 'sara@example.com', '2026-06-14 11:58:35.794020', '2026-06-14 11:58:35.794020') RETURNING "id" /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mPost Create (2.9ms)[0m  [1m[32mINSERT INTO "posts" ("title", "body", "user_id", "created_at", "updated_at") VALUES ('First Post', 'This is the first post content.', 1, '2026-06-14 11:58:35.821324', '2026-06-14 11:58:35.821324') RETURNING "id" /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mPost Create (2.8ms)[0m  [1m[32mINSERT INTO "posts" ("title", "body", "user_id", "created_at", "updated_at") VALUES ('Second Post', 'This is the second post content.', 1, '2026-06-14 11:58:35.829912', '2026-06-14 11:58:35.829912') RETURNING "id" /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mPost Create (2.6ms)[0m  [1m[32mINSERT INTO "posts" ("title", "body", "user_id", "created_at", "updated_at") VALUES ('Third Post', 'This is the third post content.', 2, '2026-06-14 11:58:35.838064', '2026-06-14 11:58:35.838064') RETURNING "id" /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mPost Create (2.8ms)[0m  [1m[32mINSERT INTO "posts" ("title", "body", "user_id", "created_at", "updated_at") VALUES ('Fourth Post', 'This is the fourth post content.', 3, '2026-06-14 11:58:35.845801', '2026-06-14 11:58:35.845801') RETURNING "id" /*application='LabFourApi'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='LabFourApi'*/[0m
+  [1m[36mUser Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "users" /*application='LabFourApi'*/[0m
+  [1m[36mPost Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "posts" /*application='LabFourApi'*/[0m
+Started GET "/users" for ::1 at 2026-06-14 14:59:26 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='LabFourApi'*/[0m
+Processing by UsersController#index as */*
+  [1m[36mUser Load (1.4ms)[0m  [1m[34mSELECT "users".* FROM "users" /*action='index',application='LabFourApi',controller='users'*/[0m
+  ↳ app/controllers/users_controller.rb:8:in 'UsersController#index'
+Completed 200 OK in 48ms (Views: 9.9ms | ActiveRecord: 2.9ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/1" for ::1 at 2026-06-14 14:59:26 +0300
+Processing by UsersController#show as */*
+  Parameters: {"id" => "1"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='show',application='LabFourApi',controller='users'*/[0m
+  ↳ app/controllers/users_controller.rb:44:in 'UsersController#set_user'
+Completed 200 OK in 6ms (Views: 0.4ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/posts" for ::1 at 2026-06-14 14:59:26 +0300
+Processing by PostsController#index as */*
+  [1m[36mPost Load (0.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" /*action='index',application='LabFourApi',controller='posts'*/[0m
+  ↳ app/controllers/posts_controller.rb:8:in 'PostsController#index'
+Completed 200 OK in 16ms (Views: 10.8ms | ActiveRecord: 0.9ms (1 query, 0 cached) | GC: 0.8ms)
+
+
+Started GET "/posts/1" for ::1 at 2026-06-14 14:59:26 +0300
+Processing by PostsController#show as */*
+  Parameters: {"id" => "1"}
+  [1m[36mPost Load (0.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = 1 LIMIT 1 /*action='show',application='LabFourApi',controller='posts'*/[0m
+  ↳ app/controllers/posts_controller.rb:44:in 'PostsController#set_post'
+Completed 200 OK in 3ms (Views: 0.3ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/users" for ::1 at 2026-06-14 14:59:46 +0300
+Processing by UsersController#create as */*
+  Parameters: {"user" => {"name" => "Test User", "email" => "[FILTERED]"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='LabFourApi',controller='users'*/[0m
+  ↳ app/controllers/users_controller.rb:20:in 'UsersController#create'
+  [1m[36mUser Create (2.1ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "created_at", "updated_at") VALUES ('Test User', 'test@example.com', '2026-06-14 11:59:46.823434', '2026-06-14 11:59:46.823434') RETURNING "id" /*action='create',application='LabFourApi',controller='users'*/[0m
+  ↳ app/controllers/users_controller.rb:20:in 'UsersController#create'
+  [1m[36mTRANSACTION (5.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='LabFourApi',controller='users'*/[0m
+  ↳ app/controllers/users_controller.rb:20:in 'UsersController#create'
+Completed 201 Created in 12ms (Views: 0.6ms | ActiveRecord: 7.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started PATCH "/users/1" for ::1 at 2026-06-14 14:59:46 +0300
+Processing by UsersController#update as */*
+  Parameters: {"user" => {"name" => "Noor Updated"}, "id" => "1"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='update',application='LabFourApi',controller='users'*/[0m
+  ↳ app/controllers/users_controller.rb:44:in 'UsersController#set_user'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='update',application='LabFourApi',controller='users'*/[0m
+  ↳ app/controllers/users_controller.rb:29:in 'UsersController#update'
+  [1m[36mUser Update (2.8ms)[0m  [1m[33mUPDATE "users" SET "name" = 'Noor Updated', "updated_at" = '2026-06-14 11:59:46.958374' WHERE "users"."id" = 1 /*action='update',application='LabFourApi',controller='users'*/[0m
+  ↳ app/controllers/users_controller.rb:29:in 'UsersController#update'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='update',application='LabFourApi',controller='users'*/[0m
+  ↳ app/controllers/users_controller.rb:29:in 'UsersController#update'
+Completed 200 OK in 12ms (Views: 0.3ms | ActiveRecord: 3.4ms (2 queries, 0 cached) | GC: 0.9ms)
+
+
+Started POST "/posts" for ::1 at 2026-06-14 14:59:47 +0300
+Processing by PostsController#create as */*
+  Parameters: {"post" => {"title" => "New Post", "body" => "New post body", "user_id" => 1}}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='create',application='LabFourApi',controller='posts'*/[0m
+  ↳ app/controllers/posts_controller.rb:20:in 'PostsController#create'
+  [1m[36mUser Load (3.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='create',application='LabFourApi',controller='posts'*/[0m
+  ↳ app/controllers/posts_controller.rb:20:in 'PostsController#create'
+  [1m[36mPost Create (0.3ms)[0m  [1m[32mINSERT INTO "posts" ("title", "body", "user_id", "created_at", "updated_at") VALUES ('New Post', 'New post body', 1, '2026-06-14 11:59:47.105892', '2026-06-14 11:59:47.105892') RETURNING "id" /*action='create',application='LabFourApi',controller='posts'*/[0m
+  ↳ app/controllers/posts_controller.rb:20:in 'PostsController#create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='create',application='LabFourApi',controller='posts'*/[0m
+  ↳ app/controllers/posts_controller.rb:20:in 'PostsController#create'
+Completed 201 Created in 38ms (Views: 0.6ms | ActiveRecord: 3.9ms (2 queries, 0 cached) | GC: 1.9ms)
+
+
+Started PATCH "/posts/1" for ::1 at 2026-06-14 14:59:47 +0300
+Processing by PostsController#update as */*
+  Parameters: {"post" => {"title" => "Updated Title"}, "id" => "1"}
+  [1m[36mPost Load (0.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = 1 LIMIT 1 /*action='update',application='LabFourApi',controller='posts'*/[0m
+  ↳ app/controllers/posts_controller.rb:44:in 'PostsController#set_post'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='update',application='LabFourApi',controller='posts'*/[0m
+  ↳ app/controllers/posts_controller.rb:29:in 'PostsController#update'
+  [1m[36mPost Update (1.6ms)[0m  [1m[33mUPDATE "posts" SET "title" = 'Updated Title', "updated_at" = '2026-06-14 11:59:47.200638' WHERE "posts"."id" = 1 /*action='update',application='LabFourApi',controller='posts'*/[0m
+  ↳ app/controllers/posts_controller.rb:29:in 'PostsController#update'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='update',application='LabFourApi',controller='posts'*/[0m
+  ↳ app/controllers/posts_controller.rb:29:in 'PostsController#update'
+Completed 200 OK in 9ms (Views: 0.3ms | ActiveRecord: 2.1ms (2 queries, 0 cached) | GC: 1.3ms)
+
+
+Started DELETE "/posts/5" for ::1 at 2026-06-14 14:59:47 +0300
+Processing by PostsController#destroy as */*
+  Parameters: {"id" => "5"}
+  [1m[36mPost Load (0.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = 5 LIMIT 1 /*action='destroy',application='LabFourApi',controller='posts'*/[0m
+  ↳ app/controllers/posts_controller.rb:44:in 'PostsController#set_post'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='destroy',application='LabFourApi',controller='posts'*/[0m
+  ↳ app/controllers/posts_controller.rb:38:in 'PostsController#destroy'
+  [1m[36mPost Destroy (1.8ms)[0m  [1m[31mDELETE FROM "posts" WHERE "posts"."id" = 5 /*action='destroy',application='LabFourApi',controller='posts'*/[0m
+  ↳ app/controllers/posts_controller.rb:38:in 'PostsController#destroy'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='destroy',application='LabFourApi',controller='posts'*/[0m
+  ↳ app/controllers/posts_controller.rb:38:in 'PostsController#destroy'
+Completed 204 No Content in 8ms (ActiveRecord: 2.4ms (2 queries, 0 cached) | GC: 0.5ms)
+
+
+Started DELETE "/users/4" for ::1 at 2026-06-14 14:59:47 +0300
+Processing by UsersController#destroy as */*
+  Parameters: {"id" => "4"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 4 LIMIT 1 /*action='destroy',application='LabFourApi',controller='users'*/[0m
+  ↳ app/controllers/users_controller.rb:44:in 'UsersController#set_user'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*action='destroy',application='LabFourApi',controller='users'*/[0m
+  ↳ app/controllers/users_controller.rb:38:in 'UsersController#destroy'
+  [1m[36mPost Load (2.7ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."user_id" = 4 /*action='destroy',application='LabFourApi',controller='users'*/[0m
+  ↳ app/controllers/users_controller.rb:38:in 'UsersController#destroy'
+  [1m[36mUser Destroy (0.1ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = 4 /*action='destroy',application='LabFourApi',controller='users'*/[0m
+  ↳ app/controllers/users_controller.rb:38:in 'UsersController#destroy'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT TRANSACTION /*action='destroy',application='LabFourApi',controller='users'*/[0m
+  ↳ app/controllers/users_controller.rb:38:in 'UsersController#destroy'
+Completed 204 No Content in 17ms (ActiveRecord: 3.3ms (3 queries, 0 cached) | GC: 0.0ms)
+
+
