@@ -1,0 +1,90 @@
+/* General Transitions & Hovers */
+.transition {
+  transition: all 0.25s ease-in-out;
+}
+
+.transition-transform {
+  transition: transform 0.25s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Header Styling & Active NavLink Styles */
+.active-link {
+  color: #aa3bff !important; /* Premium Violet Accent */
+  background-color: rgba(170, 59, 255, 0.08) !important;
+  box-shadow: inset 0 0 0 1px rgba(170, 59, 255, 0.15);
+}
+
+.nav-link:hover {
+  color: #aa3bff !important;
+  background-color: rgba(170, 59, 255, 0.04);
+}
+
+/* Courses Layout Nested Sub-navigation active pill styling */
+.active-pill {
+  background-color: #aa3bff !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(170, 59, 255, 0.25);
+}
+
+.hover-bg-light:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: #212529 !important;
+}
+
+/* Course Card Premium Effects */
+.course-card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px -10px rgba(170, 59, 255, 0.2) !important;
+  border-color: rgba(170, 59, 255, 0.25) !important;
+}
+
+/* Multi-line Truncation for responsive cards */
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-truncate-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Form Styles & Focus Ring */
+.form-control:focus {
+  border-color: #aa3bff;
+  box-shadow: 0 0 0 0.25rem rgba(170, 59, 255, 0.2);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(170, 59, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(170, 59, 255, 0.4);
+}
+
+/* Alerts and Shadows */
+.alert {
+  border-radius: 12px;
+}
